@@ -3,10 +3,8 @@
 namespace be_artwork_sharing_platform.Core.Entities
 {
     [Table("payments")]
-    public class Payment : BaseEntity<int>
+    public class Payment : BaseEntity<long>
     {
 
-        //Relationship
-        public string User_Id { get; set; }
     }
 }

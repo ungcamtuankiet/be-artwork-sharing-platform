@@ -5,10 +5,5 @@ namespace be_artwork_sharing_platform.Core.Entities
     [Table("favourites")]
     public class Favourite : BaseEntity<long>
     {
-        
-
-        //Relationship
-        public string user_id { get; set; }
-
     }
 }

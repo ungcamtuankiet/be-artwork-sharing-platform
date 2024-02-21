@@ -30,7 +30,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //Dependency Injection
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 //Add Identity
 builder.Services

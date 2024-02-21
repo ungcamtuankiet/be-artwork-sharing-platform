@@ -7,8 +7,5 @@ namespace be_artwork_sharing_platform.Core.Entities
     {
         public int Quantity { get; set; }
         public double Price { get; set; }
-
-        //Relationship
-        public string User_id { get; set; }
     }
 }

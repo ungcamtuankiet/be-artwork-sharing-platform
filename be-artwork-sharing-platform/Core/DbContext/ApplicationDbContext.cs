@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using System.Reflection.Emit;
 
 namespace be_artwork_sharing_platform.Core.DbContext
 {
@@ -11,6 +13,12 @@ namespace be_artwork_sharing_platform.Core.DbContext
 
         public DbSet<Log> Logs { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Artwork> Artworks { get; set; }
+        public DbSet<Favourite> Favorites { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<RequestOrder> RequestOrders { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

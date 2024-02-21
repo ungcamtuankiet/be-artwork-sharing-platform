@@ -11,5 +11,8 @@ namespace be_artwork_sharing_platform.Core.Entities
 
         [NotMapped]
         public IList<string> Roles { get; set; }
+
+        //Relationship
+        
     }
 }
