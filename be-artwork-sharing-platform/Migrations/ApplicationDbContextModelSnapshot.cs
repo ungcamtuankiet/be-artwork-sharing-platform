@@ -231,13 +231,62 @@ namespace be_artwork_sharing_platform.Migrations
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Artwork", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Category_Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url_Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("User_Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("artworks");
+                });
+
             modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -257,7 +306,83 @@ namespace be_artwork_sharing_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("categories");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Comment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("Artwork_Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Comment_Test")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("User_Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Artwork_Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("comments");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Favourite", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("Artwork_Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("User_Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Artwork_Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("favourites");
                 });
 
             modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Log", b =>
@@ -290,6 +415,70 @@ namespace be_artwork_sharing_platform.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("logs", (string)null);
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Payment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ArtworkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Artwork_Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("User_Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtworkId");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("payments");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.RequestOrder", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("request-orders");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -341,6 +530,103 @@ namespace be_artwork_sharing_platform.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Artwork", b =>
+                {
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.Category", "Category")
+                        .WithMany("Artworks")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.ApplicationUser", "User")
+                        .WithMany("Artworks")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Comment", b =>
+                {
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.Artwork", "Artwork")
+                        .WithMany("Comments")
+                        .HasForeignKey("Artwork_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.ApplicationUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artwork");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Favourite", b =>
+                {
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.Artwork", "Artwork")
+                        .WithMany("Favourite")
+                        .HasForeignKey("Artwork_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.ApplicationUser", "User")
+                        .WithMany("Favourites")
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artwork");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Payment", b =>
+                {
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.Artwork", "Artwork")
+                        .WithMany()
+                        .HasForeignKey("ArtworkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.ApplicationUser", "User")
+                        .WithMany("Payments")
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artwork");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Artworks");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Favourites");
+
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Artwork", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Favourite");
+                });
+
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Category", b =>
+                {
+                    b.Navigation("Artworks");
                 });
 #pragma warning restore 612, 618
         }

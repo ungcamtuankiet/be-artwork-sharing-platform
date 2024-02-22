@@ -11,5 +11,12 @@ namespace be_artwork_sharing_platform.Core.Entities
 
         [NotMapped]
         public IList<string> Roles { get; set; }
+
+        //Relationship
+        public List<Comment> Comments { get; set; }
+        public List<Payment> Payments { get; set; }
+        public List<Favourite> Favourites { get; set; }
+        public List<Artwork> Artworks { get; set; }
+
     }
 }

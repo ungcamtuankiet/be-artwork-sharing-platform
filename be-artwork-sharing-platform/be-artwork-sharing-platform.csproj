@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Dtos\Artwork\" />
     <Folder Include="Core\Dtos\Favourite\" />
     <Folder Include="Core\Dtos\Comment\" />
     <Folder Include="Core\Dtos\RequestOrder\" />

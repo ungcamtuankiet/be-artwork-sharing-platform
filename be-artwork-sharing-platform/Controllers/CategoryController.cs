@@ -6,7 +6,6 @@ using be_artwork_sharing_platform.Core.Entities;
 using be_artwork_sharing_platform.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be_artwork_sharing_platform.Controllers
@@ -15,57 +14,49 @@ namespace be_artwork_sharing_platform.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
-        private readonly ILogService _logService;
         private readonly IMapper _mapper;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService, ILogService logService, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public CategoryController(IMapper mapper, ICategoryService categoryService)
         {
-            _categoryService = categoryService;
-            _logService = logService;
             _mapper = mapper;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        [Route("get-all")]
+        [Route("get-all-category")]
         public IActionResult GetAll()
         {
             var categories = _categoryService.GetAll();
-            return Ok(categories);
+            return Ok(_mapper.Map<List<CategoryDto>>(categories));
         }
 
         [HttpGet]
-        [Route("get-by-id/{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        [Route("{id}")]
+        public IActionResult GetById(long id)
         {
             try
             {
                 var category = _categoryService.GetById(id);
-                if(category == null)
-                {
-                    return NotFound("Category not found");
-                }
-                else
-                {
-                    return Ok(_mapper.Map<CategoryDto>(category));
-                }
+                if (category is null) return NotFound("Category not found");
+                return Ok(_mapper.Map<CategoryDto>(category));
             }
-            catch (Exception ex)
+            catch
             {
                 return BadRequest("Something wrong");
             }
         }
 
         [HttpPost]
-        [Route("create-category")]
+        [Route("create")]
         [Authorize(Roles = StaticUserRole.ADMIN)]
-        public IActionResult Create([FromBody] CreateCategory createCategory)
+        public IActionResult CreateCategory([FromBody] CreateCategory category)
         {
             try
             {
                 var result = _categoryService.CreateCategory(new Category
                 {
-                    Name = createCategory.Name, 
+                    Name = category.Name,
                 });
 
                 if(result > 0)
@@ -73,13 +64,18 @@ namespace be_artwork_sharing_platform.Controllers
                     return Ok(new GeneralServiceResponseDto
                     {
                         IsSucceed = true,
-                        StatusCode = 200,
+                        StatusCode = 204,
                         Message = "Create successfully"
                     });
                 }
                 else
                 {
-                    return BadRequest("Create failed");
+                    return BadRequest(new GeneralServiceResponseDto
+                    {
+                        IsSucceed= false,
+                        StatusCode = 400,
+                        Message = "Create failed"
+                    });
                 }
             }
             catch
@@ -89,25 +85,30 @@ namespace be_artwork_sharing_platform.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("delete")]
         [Authorize(Roles = StaticUserRole.ADMIN)]
-        public IActionResult DeleteCategory([FromRoute] int id)
+        public IActionResult DeleteCategory(long id)
         {
             try
             {
-                var result = (_categoryService.DeleteCategory(id));
+                var result = _categoryService.Delete(id);
                 if(result > 0)
                 {
-                    return Ok(new GeneralServiceResponseDto()
+                    return Ok(new GeneralServiceResponseDto
                     {
-                        IsSucceed= true,
+                        IsSucceed = true,
                         StatusCode = 200,
                         Message = "Delete Successfully"
                     });
                 }
                 else
                 {
-                    return BadRequest("Delete failed");
+                    return BadRequest(new GeneralServiceResponseDto
+                    {
+                        IsSucceed = false,
+                        StatusCode = 400,
+                        Message = "Delete Failed"
+                    });
                 }
             }
             catch
