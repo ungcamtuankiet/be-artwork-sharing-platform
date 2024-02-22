@@ -12,26 +12,6 @@ namespace be_artwork_sharing_platform.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "artworks",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Url_Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_artworks", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "categories",
                 columns: table => new
                 {
@@ -46,39 +26,6 @@ namespace be_artwork_sharing_platform.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "comments",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Comment_Test = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_comments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "favourites",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_favourites", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,40 +44,6 @@ namespace be_artwork_sharing_platform.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_logs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "orders",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_orders", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "payments",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_payments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -210,6 +123,39 @@ namespace be_artwork_sharing_platform.Migrations
                         principalTable: "roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "artworks",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url_Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    User_Id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Category_Id = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_artworks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_artworks_categories_Id",
+                        column: x => x.Id,
+                        principalTable: "categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_artworks_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -297,6 +243,133 @@ namespace be_artwork_sharing_platform.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "comments",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Comment_Test = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Artwork_Id = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_comments_artworks_Artwork_Id",
+                        column: x => x.Artwork_Id,
+                        principalTable: "artworks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_comments_users_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "favourites",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Artwork_Id = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_favourites", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_favourites_artworks_Artwork_Id",
+                        column: x => x.Artwork_Id,
+                        principalTable: "artworks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_favourites_users_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "payments",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Artwork_Id = table.Column<long>(type: "bigint", nullable: false),
+                    ArtworkId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_payments_artworks_ArtworkId",
+                        column: x => x.ArtworkId,
+                        principalTable: "artworks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_payments_users_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_artworks_UserId",
+                table: "artworks",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_comments_Artwork_Id",
+                table: "comments",
+                column: "Artwork_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_comments_User_Id",
+                table: "comments",
+                column: "User_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_favourites_Artwork_Id",
+                table: "favourites",
+                column: "Artwork_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_favourites_User_Id",
+                table: "favourites",
+                column: "User_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payments_ArtworkId",
+                table: "payments",
+                column: "ArtworkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payments_User_Id",
+                table: "payments",
+                column: "User_Id");
+
             migrationBuilder.CreateIndex(
                 name: "IX_roleclaims_RoleId",
                 table: "roleclaims",
@@ -341,12 +414,6 @@ namespace be_artwork_sharing_platform.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "artworks");
-
-            migrationBuilder.DropTable(
-                name: "categories");
-
-            migrationBuilder.DropTable(
                 name: "comments");
 
             migrationBuilder.DropTable(
@@ -354,9 +421,6 @@ namespace be_artwork_sharing_platform.Migrations
 
             migrationBuilder.DropTable(
                 name: "logs");
-
-            migrationBuilder.DropTable(
-                name: "orders");
 
             migrationBuilder.DropTable(
                 name: "payments");
@@ -380,7 +444,13 @@ namespace be_artwork_sharing_platform.Migrations
                 name: "usertokens");
 
             migrationBuilder.DropTable(
+                name: "artworks");
+
+            migrationBuilder.DropTable(
                 name: "roles");
+
+            migrationBuilder.DropTable(
+                name: "categories");
 
             migrationBuilder.DropTable(
                 name: "users");

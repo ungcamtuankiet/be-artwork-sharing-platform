@@ -9,5 +9,14 @@ namespace be_artwork_sharing_platform.Core.Entities
         public string Description { get; set; }
         public string Url_Image { get; set; }
         public double Price { get; set; }
+
+        //Relationship
+        public string User_Id { get; set; }
+        public ApplicationUser User { get; set; }
+        public long Category_Id { get; set; }
+        public Category Category { get; set; }
+        public List<Favourite> Favourite { get; set; }
+        public ICollection<Comment> Comments { get; set; } 
     }
+    
 }
