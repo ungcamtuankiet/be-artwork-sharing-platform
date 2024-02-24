@@ -6,6 +6,7 @@ using be_artwork_sharing_platform.Core.Entities;
 using be_artwork_sharing_platform.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be_artwork_sharing_platform.Controllers
@@ -16,11 +17,15 @@ namespace be_artwork_sharing_platform.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICategoryService _categoryService;
+        private readonly ILogService _logService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CategoryController(IMapper mapper, ICategoryService categoryService)
+        public CategoryController(IMapper mapper, ICategoryService categoryService, ILogService logService, UserManager<ApplicationUser> userManager)
         {
             _mapper = mapper;
             _categoryService = categoryService;
+            _logService = logService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -28,6 +33,7 @@ namespace be_artwork_sharing_platform.Controllers
         public IActionResult GetAll()
         {
             var categories = _categoryService.GetAll();
+            
             return Ok(_mapper.Map<List<CategoryDto>>(categories));
         }
 

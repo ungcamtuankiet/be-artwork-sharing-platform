@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace be_artwork_sharing_platform.Core.Dtos.Artwork
+﻿namespace be_artwork_sharing_platform.Core.Dtos.Artwork
 {
-    public class CreateArtwork
+    public class UpdateArtwork
     {
         public string Name { get; set; }
         public string Category_Name { get; set; }

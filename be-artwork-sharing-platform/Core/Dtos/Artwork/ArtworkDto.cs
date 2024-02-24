@@ -4,7 +4,7 @@
     {
         public long Id { get; set; }
         public string User_Id { get; set; }
-        public long Category_Id { get; set; }
+        public string Category_Name { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Url_Image { get; set; }
