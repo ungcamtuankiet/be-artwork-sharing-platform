@@ -51,7 +51,7 @@ namespace be_artwork_sharing_platform.Controllers
             if (artworks is null)
                 return NoContent();
             return Ok(_mapper.Map<List<ArtworkDto>>(artworks));
-            
+
         }
 
         [HttpGet]

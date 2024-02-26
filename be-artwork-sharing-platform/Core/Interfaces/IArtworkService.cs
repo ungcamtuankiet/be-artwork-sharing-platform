@@ -12,6 +12,6 @@ namespace be_artwork_sharing_platform.Core.Interfaces
         IEnumerable<Artwork> GetArtworkByUserId(string user_Id);
         Task CreateArtwork(CreateArtwork artworkDto, string user_Id);
         int Delete(long id);
-        
+
     }
 }
