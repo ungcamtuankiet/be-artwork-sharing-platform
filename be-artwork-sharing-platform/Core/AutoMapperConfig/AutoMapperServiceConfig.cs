@@ -13,6 +13,7 @@ namespace be_artwork_sharing_platform.Core.AutoMapperConfig
             CreateMap<Category, CategoryDto>();
 
             //Artwork
+            CreateMap<Artwork, ArtworkDto>();
         }
     }
 }

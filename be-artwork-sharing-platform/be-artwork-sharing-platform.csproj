@@ -21,11 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Dtos\Favourite\" />
-    <Folder Include="Core\Dtos\Comment\" />
-    <Folder Include="Core\Dtos\RequestOrder\" />
-    <Folder Include="Core\Dtos\Payment\" />
-    <Folder Include="Core\Dtos\Order\" />
+    <Folder Include="Images\" />
   </ItemGroup>
 
 </Project>
