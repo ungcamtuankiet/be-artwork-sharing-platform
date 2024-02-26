@@ -8,6 +8,6 @@ namespace be_artwork_sharing_platform.Core.Entities
         public string Name { get; set; }
 
         //Relationship
-        public List<Artwork> Artworks { get; set; }
+        public ICollection<Artwork> Artworks { get; set; }
     }
 }
