@@ -21,9 +21,41 @@ namespace be_artwork_sharing_platform.Core.Services
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IEnumerable<Artwork> GetAll()
+        public IEnumerable<Artwork> GetAll(string? search, double? from, double? to, string sortBy)
         {
-            return _context.Artworks.ToList();
+            var artworks = _context.Artworks.Include(a => a.Category).AsQueryable();
+
+            #region Filter
+            if (!string.IsNullOrEmpty(search))
+            {
+                artworks = artworks.Where(a => a.Name.Contains(search));
+            }
+            if(from.HasValue)
+            {
+                artworks = artworks.Where(a => a.Price >= from);
+            }
+            if(to.HasValue)
+            {
+                artworks = artworks.Where(a => a.Price <= to);
+            }
+            #endregion
+
+            #region Sorting
+            //Default sort by Name (TenHh)
+            artworks = artworks.OrderBy(hh => hh.Name);
+
+            if(!string.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "price_asc": artworks = artworks.OrderBy(a => a.Price);
+                        break;
+                    case "price_desc": artworks = artworks.OrderByDescending(a => a.Price);
+                        break;
+                }
+            }
+            #endregion
+            return artworks.ToList();
         }
 
         public Artwork GetById(long id)
