@@ -33,16 +33,27 @@ namespace be_artwork_sharing_platform.Core.Services
 
         public async Task CreateArtwork(CreateArtwork artworkDto, string user_Id)
         {
-            artworkDto.Url_Image = await SaveImage(artworkDto.ImageFile);
             var artwork = new Artwork
             {
                 User_Id = user_Id,
                 Category_Name = artworkDto.Category_Name,
                 Name = artworkDto.Name,
                 Description = artworkDto.Description,
-                Url_Image = artworkDto.Url_Image,
                 Price = artworkDto.Price,
             };
+            if(artworkDto.ImageFile.Length > 0)
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "Images", artworkDto.ImageFile.FileName);
+                using (var stream = System.IO.File.Create(path))
+                {
+                    await artworkDto.ImageFile.CopyToAsync(stream);
+                }
+                artwork.Url_Image = "/Images/" + artworkDto.ImageFile.FileName;
+            }
+            else
+            {
+                artwork.Url_Image = "";
+            }
             await _context.Artworks.AddAsync(artwork);
             await _context.SaveChangesAsync();
         }
@@ -52,18 +63,6 @@ namespace be_artwork_sharing_platform.Core.Services
             var artwork =  _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");
             _context.Remove(artwork);
             return _context.SaveChanges();
-        }
-
-        public async Task<string> SaveImage(IFormFile imageFile)
-        {
-            string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
-            imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
-            var imagePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images", imageName);
-            using (var fileStream = new FileStream(imagePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-            return imageName;
         }
     }
 }
