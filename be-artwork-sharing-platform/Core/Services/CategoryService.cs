@@ -38,5 +38,14 @@ namespace be_artwork_sharing_platform.Core.Services
             _context.Categories.Remove(category);
             return _context.SaveChanges();
         }
+
+        public async Task<IEnumerable<string>> GetCategortNameListAsync()
+        {
+            var categortName = await _context.Categories
+                .Select(q => q.Name)
+                .ToListAsync();
+
+            return categortName;
+        }
     }
 }

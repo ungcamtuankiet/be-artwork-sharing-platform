@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using be_artwork_sharing_platform.Core.Constancs;
+using be_artwork_sharing_platform.Core.DbContext;
 using be_artwork_sharing_platform.Core.Dtos.Artwork;
+using be_artwork_sharing_platform.Core.Dtos.Category;
 using be_artwork_sharing_platform.Core.Dtos.General;
 using be_artwork_sharing_platform.Core.Entities;
 using be_artwork_sharing_platform.Core.Interfaces;
@@ -16,12 +18,53 @@ namespace be_artwork_sharing_platform.Controllers
     {
         private readonly IArtworkService _artworkService;
         private readonly IAuthService _authService;
+        private readonly ILogService _logService;
+        private readonly IMapper _mapper;
 
-        public ArtworkController(IArtworkService artworkService, IAuthService authService)
+        public ArtworkController(IArtworkService artworkService, IAuthService authService, ILogService logService, IMapper mapper)
         {
             _artworkService = artworkService;
             _authService = authService;
+            _logService = logService;
+            _mapper = mapper;
         }
+
+        [HttpGet]
+        [Route("get-all")]
+        [Authorize]
+        public IActionResult GetAll()
+        {
+            var artworks = _artworkService.GetAll();
+            return Ok(_mapper.Map<List<ArtworkDto>>(artworks));
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        [Authorize]
+        public IActionResult GetById(long id)
+        {
+            try
+            {
+                var artwork = _artworkService.GetById(id);
+                if(artwork is null)
+                    return NotFound(new GeneralServiceResponseDto
+                    {
+                        IsSucceed = false,
+                        StatusCode = 204,
+                        Message = "Artwork not found"
+                    });
+                else
+                {
+                    return Ok(_mapper.Map<ArtworkDto>(artwork));
+                }
+            }
+            catch
+            {
+                return BadRequest("Somethong wrong");
+            }
+        }
+
+        
 
         [HttpPost]
         [Route("create")]
@@ -33,6 +76,7 @@ namespace be_artwork_sharing_platform.Controllers
                 string userName = HttpContext.User.Identity.Name;
                 string userId = await _authService.GetCurrentUserId(userName);
                 await _artworkService.CreateArtwork(artworkDto, userId);
+                await _logService.SaveNewLog(userName, "Create New Artwork");
                 return Ok(new GeneralServiceResponseDto()
                 {
                     IsSucceed = true,
@@ -45,5 +89,42 @@ namespace be_artwork_sharing_platform.Controllers
                 return BadRequest("Create new Artworl Failed");
             }
         }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        [Authorize(Roles = StaticUserRole.CREATOR)]
+        public async Task<IActionResult> Delete([FromRoute] long id)
+        {
+            try
+            {
+                string userName = HttpContext.User.Identity.Name;
+                var result = _artworkService.Delete(id);
+                if(result > 0)
+                {
+                    _logService.SaveNewLog(userName, "Delete Artwork Successfully");
+                    return Ok(new GeneralServiceResponseDto
+                    {
+                        IsSucceed = true,
+                        StatusCode = 200,
+                        Message = "Delete Artwork Successfully"
+                    });
+                }
+                else
+                {
+                    return BadRequest(new GeneralServiceResponseDto
+                    {
+                        IsSucceed = true,
+                        StatusCode = 400,
+                        Message = "Delete Artwork Failed"
+                    });
+                }
+            }
+            catch
+            {
+                return BadRequest("Somethong wrong");
+            }
+        }
+
+        
     }
 }

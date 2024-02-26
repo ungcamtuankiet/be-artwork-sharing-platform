@@ -1,4 +1,6 @@
-﻿namespace be_artwork_sharing_platform.Core.Dtos.Artwork
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace be_artwork_sharing_platform.Core.Dtos.Artwork
 {
     public class ArtworkDto
     {
@@ -12,6 +14,6 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; } 
         public bool IsActive { get; set; } 
-        public bool IsDeleted { get; set; } 
+        public bool IsDeleted { get; set; }
     }
 }

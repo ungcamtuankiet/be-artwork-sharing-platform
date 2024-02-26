@@ -18,14 +18,14 @@ namespace be_artwork_sharing_platform.Controllers
         private readonly IMapper _mapper;
         private readonly ICategoryService _categoryService;
         private readonly ILogService _logService;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthService _authService;
 
-        public CategoryController(IMapper mapper, ICategoryService categoryService, ILogService logService, UserManager<ApplicationUser> userManager)
+        public CategoryController(IMapper mapper, ICategoryService categoryService, ILogService logService, IAuthService authService)
         {
             _mapper = mapper;
             _categoryService = categoryService;
             _logService = logService;
-            _userManager = userManager;
+            _authService = authService;
         }
 
         [HttpGet]
@@ -60,6 +60,7 @@ namespace be_artwork_sharing_platform.Controllers
         {
             try
             {
+                string userName = HttpContext.User.Identity.Name;
                 var result = _categoryService.CreateCategory(new Category
                 {
                     Name = category.Name,
@@ -67,6 +68,7 @@ namespace be_artwork_sharing_platform.Controllers
 
                 if(result > 0)
                 {
+                    _logService.SaveNewLog(userName, "Create New Category");
                     return Ok(new GeneralServiceResponseDto
                     {
                         IsSucceed = true,
@@ -76,6 +78,7 @@ namespace be_artwork_sharing_platform.Controllers
                 }
                 else
                 {
+                    _logService.SaveNewLog(userName, "Create New Category Failed");
                     return BadRequest(new GeneralServiceResponseDto
                     {
                         IsSucceed= false,
@@ -97,9 +100,11 @@ namespace be_artwork_sharing_platform.Controllers
         {
             try
             {
+                string userName = HttpContext.User.Identity.Name;
                 var result = _categoryService.Delete(id);
                 if(result > 0)
                 {
+                    _logService.SaveNewLog(userName, "Delete Category Successfully");
                     return Ok(new GeneralServiceResponseDto
                     {
                         IsSucceed = true,
@@ -109,6 +114,7 @@ namespace be_artwork_sharing_platform.Controllers
                 }
                 else
                 {
+                    _logService.SaveNewLog(userName, "Delete Category Failed");
                     return BadRequest(new GeneralServiceResponseDto
                     {
                         IsSucceed = false,
@@ -121,6 +127,14 @@ namespace be_artwork_sharing_platform.Controllers
             {
                 return BadRequest("Error delete category");
             }
+        }
+
+        [HttpGet]
+        [Route("categorynames")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCategoryNameList()
+        {
+            var categoryNames = await _categoryService.GetCategortNameListAsync();
+            return Ok(categoryNames);
         }
     }
 }
