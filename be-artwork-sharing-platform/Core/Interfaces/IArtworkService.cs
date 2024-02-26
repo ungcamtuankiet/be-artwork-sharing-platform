@@ -9,6 +9,7 @@ namespace be_artwork_sharing_platform.Core.Interfaces
     {
         IEnumerable<Artwork> GetAll(string? search, double? from, double? to, string? sortBy);
         Artwork GetById(long id);
+        IEnumerable<Artwork> GetArtworkByUserId(string user_Id);
         Task CreateArtwork(CreateArtwork artworkDto, string user_Id);
         int Delete(long id);
         

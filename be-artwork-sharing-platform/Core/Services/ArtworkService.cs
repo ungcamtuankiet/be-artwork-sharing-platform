@@ -58,6 +58,14 @@ namespace be_artwork_sharing_platform.Core.Services
             return artworks.ToList();
         }
 
+        public IEnumerable<Artwork> GetArtworkByUserId(string user_Id)
+        {
+            var artworks = _context.Artworks.Where(a => a.User_Id == user_Id);
+            if (artworks is null)
+                return null;
+            return artworks.ToList();
+        }
+
         public Artwork GetById(long id)
         {
             return _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");

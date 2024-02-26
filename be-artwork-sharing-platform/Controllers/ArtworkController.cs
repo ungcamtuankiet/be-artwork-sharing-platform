@@ -41,6 +41,20 @@ namespace be_artwork_sharing_platform.Controllers
         }
 
         [HttpGet]
+        [Route("get-by-userId")]
+        [Authorize(Roles = StaticUserRole.CREATOR)]
+        public async Task<IActionResult> GetByUserIdAsync()
+        {
+            string userName = HttpContext.User.Identity.Name;
+            string userId = await _authService.GetCurrentUserId(userName);
+            var artworks = _artworkService.GetArtworkByUserId(userId);
+            if (artworks is null)
+                return NoContent();
+            return Ok(_mapper.Map<List<ArtworkDto>>(artworks));
+            
+        }
+
+        [HttpGet]
         [Route("{id}")]
         [Authorize]
         public IActionResult GetById(long id)
