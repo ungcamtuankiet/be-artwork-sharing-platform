@@ -69,7 +69,7 @@ namespace be_artwork_sharing_platform.Controllers
         [HttpPost]
         [Route("create")]
         [Authorize(Roles = StaticUserRole.CREATOR)]
-        public async Task<IActionResult> Create([FromBody] CreateArtwork artworkDto)
+        public async Task<IActionResult> Create([FromForm] CreateArtwork artworkDto)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace be_artwork_sharing_platform.Controllers
             }
             catch
             {
-                return BadRequest("Create new Artworl Failed");
+                return BadRequest("Create new Artwork Failed");
             }
         }
 
