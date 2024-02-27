@@ -31,7 +31,6 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpGet]
         [Route("get-all")]
-        [Authorize]
         public IActionResult GetAll(string? search, double? from, double? to, string? sortBy)
         {
             var artworks = _artworkService.GetAll(search, from, to, sortBy);
