@@ -30,11 +30,11 @@ namespace be_artwork_sharing_platform.Core.Services
             {
                 artworks = artworks.Where(a => a.Name.Contains(search));
             }
-            if(from.HasValue)
+            if (from.HasValue)
             {
                 artworks = artworks.Where(a => a.Price >= from);
             }
-            if(to.HasValue)
+            if (to.HasValue)
             {
                 artworks = artworks.Where(a => a.Price <= to);
             }
@@ -44,17 +44,27 @@ namespace be_artwork_sharing_platform.Core.Services
             //Default sort by Name (TenHh)
             artworks = artworks.OrderBy(hh => hh.Name);
 
-            if(!string.IsNullOrEmpty(sortBy))
+            if (!string.IsNullOrEmpty(sortBy))
             {
                 switch (sortBy)
                 {
-                    case "price_asc": artworks = artworks.OrderBy(a => a.Price);
+                    case "price_asc":
+                        artworks = artworks.OrderBy(a => a.Price);
                         break;
-                    case "price_desc": artworks = artworks.OrderByDescending(a => a.Price);
+                    case "price_desc":
+                        artworks = artworks.OrderByDescending(a => a.Price);
                         break;
                 }
             }
             #endregion
+            return artworks.ToList();
+        }
+
+        public IEnumerable<Artwork> GetArtworkByUserId(string user_Id)
+        {
+            var artworks = _context.Artworks.Where(a => a.User_Id == user_Id);
+            if (artworks is null)
+                return null;
             return artworks.ToList();
         }
 
@@ -73,7 +83,7 @@ namespace be_artwork_sharing_platform.Core.Services
                 Description = artworkDto.Description,
                 Price = artworkDto.Price,
             };
-            if(artworkDto.ImageFile.Length > 0)
+            if (artworkDto.ImageFile.Length > 0)
             {
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "Images", artworkDto.ImageFile.FileName);
                 using (var stream = System.IO.File.Create(path))
@@ -92,7 +102,7 @@ namespace be_artwork_sharing_platform.Core.Services
 
         public int Delete(long id)
         {
-            var artwork =  _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");
+            var artwork = _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");
             _context.Remove(artwork);
             return _context.SaveChanges();
         }
