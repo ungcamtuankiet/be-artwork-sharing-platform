@@ -31,10 +31,20 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpGet]
         [Route("get-all")]
-        public IActionResult GetAll(string? search, double? from, double? to, string? sortBy)
+        public IActionResult GetAll()
         {
-            var artworks = _artworkService.GetAll(search, from, to, sortBy);
-            if(artworks is null)
+            var artworks = _artworkService.GetAll();
+            if (artworks is null)
+                return null;
+            return Ok(artworks);
+        }
+
+        [HttpPost]
+        [Route("search")]
+        public IActionResult Search(string? search, double? from, double? to, string? sortBy)
+        {
+            var artworks = _artworkService.SearchArtwork(search, from, to, sortBy);
+            if (artworks is null)
                 return NotFound("Artworks not available");
             return Ok(_mapper.Map<List<ArtworkDto>>(artworks));
         }
