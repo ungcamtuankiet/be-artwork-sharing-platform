@@ -306,5 +306,13 @@ namespace be_artwork_sharing_platform.Core.Services
                 return user.Id;
             return null;
         }
+
+        public async Task<string> GetCurrentUserName(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user is not null)
+                return user.FullName;
+            return null;
+        }
     }
 }

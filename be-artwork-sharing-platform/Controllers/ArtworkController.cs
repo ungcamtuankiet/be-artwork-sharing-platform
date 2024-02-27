@@ -41,9 +41,9 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpPost]
         [Route("search")]
-        public IActionResult Search(string? search, double? from, double? to, string? sortBy)
+        public IActionResult Search(string? search,string? saerchBy, double? from, double? to, string? sortBy)
         {
-            var artworks = _artworkService.SearchArtwork(search, from, to, sortBy);
+            var artworks = _artworkService.SearchArtwork(search, saerchBy, from, to, sortBy);
             if (artworks is null)
                 return NotFound("Artworks not available");
             return Ok(_mapper.Map<List<ArtworkDto>>(artworks));
@@ -98,7 +98,8 @@ namespace be_artwork_sharing_platform.Controllers
             {
                 string userName = HttpContext.User.Identity.Name;
                 string userId = await _authService.GetCurrentUserId(userName);
-                await _artworkService.CreateArtwork(artworkDto, userId);
+                string userNameCurrent = await _authService.GetCurrentUserName(userName);
+                await _artworkService.CreateArtwork(artworkDto, userId, userNameCurrent);
                 await _logService.SaveNewLog(userName, "Create New Artwork");
                 return Ok(new GeneralServiceResponseDto()
                 {

@@ -26,14 +26,22 @@ namespace be_artwork_sharing_platform.Core.Services
             return _context.Artworks.ToList();
         }
 
-        public IEnumerable<Artwork> SearchArtwork(string? search, double? from, double? to, string? sortBy)
+        public IEnumerable<Artwork> SearchArtwork(string? search,string? searchBy, double? from, double? to, string? sortBy)
         {
             var artworks = _context.Artworks.Include(a => a.Category).AsQueryable();
 
             #region Filter
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(searchBy))
             {
-                artworks = artworks.Where(a => a.Name.Contains(search));
+                switch (searchBy)
+                {
+                    case "category_name": 
+                        artworks = artworks.Where(a => a.Category_Name.Contains(search));
+                        break;
+                    case "user_name":
+                        artworks = artworks.Where(a => a.User_Name.Contains(search));
+                        break;
+                }
             }
             if (from.HasValue)
             {
@@ -47,7 +55,7 @@ namespace be_artwork_sharing_platform.Core.Services
 
             #region Sorting
             //Default sort by Name (TenHh)
-            artworks = artworks.OrderBy(hh => hh.Name);
+            artworks = artworks.OrderBy(a => a.Name);
 
             if (!string.IsNullOrEmpty(sortBy))
             {
@@ -78,11 +86,12 @@ namespace be_artwork_sharing_platform.Core.Services
             return _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");
         }
 
-        public async Task CreateArtwork(CreateArtwork artworkDto, string user_Id)
+        public async Task CreateArtwork(CreateArtwork artworkDto, string user_Id, string user_Name)
         {
             var artwork = new Artwork
             {
                 User_Id = user_Id,
+                User_Name = user_Name,
                 Category_Name = artworkDto.Category_Name,
                 Name = artworkDto.Name,
                 Description = artworkDto.Description,
