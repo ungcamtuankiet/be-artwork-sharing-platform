@@ -21,7 +21,12 @@ namespace be_artwork_sharing_platform.Core.Services
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IEnumerable<Artwork> GetAll(string? search, double? from, double? to, string sortBy)
+        public IEnumerable<Artwork> GetAll()
+        {
+            return _context.Artworks.ToList();
+        }
+
+        public IEnumerable<Artwork> SearchArtwork(string? search, double? from, double? to, string? sortBy)
         {
             var artworks = _context.Artworks.Include(a => a.Category).AsQueryable();
 
