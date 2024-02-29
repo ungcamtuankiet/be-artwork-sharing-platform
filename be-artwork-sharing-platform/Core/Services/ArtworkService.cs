@@ -29,6 +29,7 @@ namespace be_artwork_sharing_platform.Core.Services
         public IEnumerable<Artwork> SearchArtwork(string? search,string? searchBy, double? from, double? to, string? sortBy)
         {
             var artworks = _context.Artworks.Include(a => a.Category).AsQueryable();
+            
 
             #region Filter
             if (!string.IsNullOrEmpty(searchBy))
@@ -53,8 +54,7 @@ namespace be_artwork_sharing_platform.Core.Services
             }
             #endregion
 
-            #region Sorting
-            //Default sort by Name (TenHh)
+            #region Sortingì
             artworks = artworks.OrderBy(a => a.Name);
 
             if (!string.IsNullOrEmpty(sortBy))
@@ -96,20 +96,9 @@ namespace be_artwork_sharing_platform.Core.Services
                 Name = artworkDto.Name,
                 Description = artworkDto.Description,
                 Price = artworkDto.Price,
+                Url_Image = artworkDto.Url_Image,
             };
-            if (artworkDto.ImageFile.Length > 0)
-            {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "Images", artworkDto.ImageFile.FileName);
-                using (var stream = System.IO.File.Create(path))
-                {
-                    await artworkDto.ImageFile.CopyToAsync(stream);
-                }
-                artwork.Url_Image = "/Images/" + artworkDto.ImageFile.FileName;
-            }
-            else
-            {
-                artwork.Url_Image = "";
-            }
+            
             await _context.Artworks.AddAsync(artwork);
             await _context.SaveChangesAsync();
         }
