@@ -41,9 +41,9 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpPost]
         [Route("search")]
-        public IActionResult Search(string? search,string? saerchBy, double? from, double? to, string? sortBy)
+        public IActionResult Search(string? search,string? searchBy, double? from, double? to, string? sortBy)
         {
-            var artworks = _artworkService.SearchArtwork(search, saerchBy, from, to, sortBy);
+            var artworks = _artworkService.SearchArtwork(search, searchBy, from, to, sortBy);
             if (artworks is null)
                 return NotFound("Artworks not available");
             return Ok(_mapper.Map<List<ArtworkDto>>(artworks));
@@ -63,7 +63,6 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        [Authorize]
         public IActionResult GetById(long id)
         {
             try

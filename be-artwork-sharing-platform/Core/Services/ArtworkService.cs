@@ -53,8 +53,7 @@ namespace be_artwork_sharing_platform.Core.Services
             }
             #endregion
 
-            #region Sorting
-            //Default sort by Name (TenHh)
+            #region Sortingì
             artworks = artworks.OrderBy(a => a.Name);
 
             if (!string.IsNullOrEmpty(sortBy))
