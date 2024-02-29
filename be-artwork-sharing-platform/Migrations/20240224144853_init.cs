@@ -12,6 +12,23 @@ namespace be_artwork_sharing_platform.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "categories",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "logs",
                 columns: table => new
                 {
@@ -88,6 +105,40 @@ namespace be_artwork_sharing_platform.Migrations
                         name: "FK_roleclaims_roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "artworks",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url_Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryId = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_artworks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_artworks_categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "categories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_artworks_users_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -178,6 +229,16 @@ namespace be_artwork_sharing_platform.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_artworks_CategoryId",
+                table: "artworks",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_artworks_User_Id",
+                table: "artworks",
+                column: "User_Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_roleclaims_RoleId",
                 table: "roleclaims",
                 column: "RoleId");
@@ -210,6 +271,13 @@ namespace be_artwork_sharing_platform.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_users_Email",
+                table: "users",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "users",
                 column: "NormalizedUserName",
@@ -220,6 +288,9 @@ namespace be_artwork_sharing_platform.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "artworks");
+
             migrationBuilder.DropTable(
                 name: "logs");
 
@@ -237,6 +308,9 @@ namespace be_artwork_sharing_platform.Migrations
 
             migrationBuilder.DropTable(
                 name: "usertokens");
+
+            migrationBuilder.DropTable(
+                name: "categories");
 
             migrationBuilder.DropTable(
                 name: "roles");

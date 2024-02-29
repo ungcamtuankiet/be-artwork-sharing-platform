@@ -1,7 +1,10 @@
-﻿using be_artwork_sharing_platform.Core.Entities;
+﻿using be_artwork_sharing_platform.Core.Constancs;
+using be_artwork_sharing_platform.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using System.Reflection.Emit;
 
 namespace be_artwork_sharing_platform.Core.DbContext
 {
@@ -11,6 +14,7 @@ namespace be_artwork_sharing_platform.Core.DbContext
 
         public DbSet<Log> Logs { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Artwork> Artworks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -20,6 +24,7 @@ namespace be_artwork_sharing_platform.Core.DbContext
             builder.Entity<ApplicationUser>(e =>
             {
                 e.ToTable("users");
+                e.HasIndex(e => e.Email).IsUnique();
             });
             //2
             builder.Entity<IdentityUserClaim<string>>(e =>
@@ -56,6 +61,11 @@ namespace be_artwork_sharing_platform.Core.DbContext
             {
                 e.ToTable("logs");
             });
+
+            builder.Entity<Artwork>()
+                .HasOne(a => a.User)
+                .WithMany(u => u.Artworks)
+                .HasForeignKey(a => a.User_Id);
         }
     }
 }

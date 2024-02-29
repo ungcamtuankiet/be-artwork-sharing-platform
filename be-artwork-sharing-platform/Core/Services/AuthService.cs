@@ -1,4 +1,5 @@
 ﻿using be_artwork_sharing_platform.Core.Constancs;
+using be_artwork_sharing_platform.Core.DbContext;
 using be_artwork_sharing_platform.Core.Dtos.Auth;
 using be_artwork_sharing_platform.Core.Dtos.General;
 using be_artwork_sharing_platform.Core.Entities;
@@ -18,13 +19,15 @@ namespace be_artwork_sharing_platform.Core.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogService _logService;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ILogService logService, IConfiguration configuration)
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ILogService logService, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _logService = logService;
             _configuration = configuration;
+            _context = context;
         }
 
         public async Task<GeneralServiceResponseDto> SeedRoleAsync()
@@ -56,6 +59,7 @@ namespace be_artwork_sharing_platform.Core.Services
         public async Task<GeneralServiceResponseDto> RegisterAsync(RegisterDto registerDto)
         {
             var isExistUser = await _userManager.FindByNameAsync(registerDto.UserName);
+            var isExistEmail = await _userManager.FindByEmailAsync(registerDto.Email);
             if (isExistUser is not null)
                 return new GeneralServiceResponseDto()
                 {
@@ -64,6 +68,13 @@ namespace be_artwork_sharing_platform.Core.Services
                     Message = "UserName Already Exist"
                 };
 
+            if (isExistEmail is not null)
+                return new GeneralServiceResponseDto()
+                {
+                    IsSucceed = false,
+                    StatusCode = 400,
+                    Message = "Email Already Exist"
+                };
             ApplicationUser newUser = new ApplicationUser()
             {
                 FullName = registerDto.FullName,
@@ -286,6 +297,22 @@ namespace be_artwork_sharing_platform.Core.Services
                 CreatedAt = user.CreatedAt,
                 Roles = roles
             };
+        }
+
+        public async Task<string> GetCurrentUserId(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if(user is not null)
+                return user.Id;
+            return null;
+        }
+
+        public async Task<string> GetCurrentUserName(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user is not null)
+                return user.FullName;
+            return null;
         }
     }
 }
