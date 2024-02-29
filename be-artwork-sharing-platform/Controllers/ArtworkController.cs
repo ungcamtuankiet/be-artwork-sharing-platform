@@ -91,7 +91,7 @@ namespace be_artwork_sharing_platform.Controllers
         [HttpPost]
         [Route("create")]
         [Authorize(Roles = StaticUserRole.CREATOR)]
-        public async Task<IActionResult> Create([FromForm] CreateArtwork artworkDto)
+        public async Task<IActionResult> Create(CreateArtwork artworkDto)
         {
             try
             {

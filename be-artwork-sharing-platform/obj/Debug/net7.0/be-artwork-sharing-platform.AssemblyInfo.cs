@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("be-artwork-sharing-platform")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a02e1c4db5a791b69e2548bc0ad3c1f465bcdd29")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a40fecebe1d58c141bb5fc20262aac8021a08863")]
 [assembly: System.Reflection.AssemblyProductAttribute("be-artwork-sharing-platform")]
 [assembly: System.Reflection.AssemblyTitleAttribute("be-artwork-sharing-platform")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
