@@ -29,20 +29,28 @@ namespace be_artwork_sharing_platform.Core.Services
         public IEnumerable<Artwork> SearchArtwork(string? search,string? searchBy, double? from, double? to, string? sortBy)
         {
             var artworks = _context.Artworks.Include(a => a.Category).AsQueryable();
-            
-
             #region Filter
-            if (!string.IsNullOrEmpty(searchBy))
+            if(searchBy is null)
             {
-                switch (searchBy)
+                if (!string.IsNullOrEmpty(search))
                 {
-                    case "category_name": 
-                        artworks = artworks.Where(a => a.Category_Name.Contains(search));
-                        break;
-                    case "user_name":
-                        artworks = artworks.Where(a => a.User_Name.Contains(search));
-                        break;
+                    artworks = artworks.Where(a => a.Name.Contains(search));
                 }
+            }
+            if(searchBy is not null)
+            {
+                if (searchBy.Equals("category_name"))
+                {
+                    if (!string.IsNullOrEmpty(search))
+                    {
+                        artworks = artworks.Where(a => a.Category_Name.Contains(search));
+                    }
+                }
+                else if (searchBy.Equals("user_name"))
+                    if (!string.IsNullOrEmpty(search))
+                    {
+                        artworks = artworks.Where(a => a.User_Name.Contains(search));
+                    }
             }
             if (from.HasValue)
             {
