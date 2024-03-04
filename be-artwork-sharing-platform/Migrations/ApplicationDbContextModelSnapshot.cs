@@ -243,9 +243,12 @@ namespace be_artwork_sharing_platform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("Category_Id")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Category_Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -284,7 +287,7 @@ namespace be_artwork_sharing_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Category_Name");
+                    b.HasIndex("Category_Id");
 
                     b.HasIndex("User_Id");
 
@@ -293,14 +296,14 @@ namespace be_artwork_sharing_platform.Migrations
 
             modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Category", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -308,10 +311,14 @@ namespace be_artwork_sharing_platform.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Name");
+                    b.HasKey("Id");
 
                     b.ToTable("categories");
                 });
@@ -403,9 +410,7 @@ namespace be_artwork_sharing_platform.Migrations
                 {
                     b.HasOne("be_artwork_sharing_platform.Core.Entities.Category", "Category")
                         .WithMany("Artworks")
-                        .HasForeignKey("Category_Name")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Category_Id");
 
                     b.HasOne("be_artwork_sharing_platform.Core.Entities.ApplicationUser", "User")
                         .WithMany("Artworks")

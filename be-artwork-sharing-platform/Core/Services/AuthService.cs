@@ -318,18 +318,15 @@ namespace be_artwork_sharing_platform.Core.Services
 
         public void UpdateUser(UpdateUser updateUser, string userId)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
             if(user is not null)
             {
-                ApplicationUser _user = new ApplicationUser()
-                {
-                    Id = userId,
-                    FullName = updateUser.FullName,
-                    Email = updateUser.Email,
-                    PhoneNumber = updateUser.PhoneNo,
-                    Address = updateUser.Address,
-                };
+                user.FullName = updateUser.FullName;
+                user.Email = updateUser.Email;
+                user.Address = updateUser.Address;
+                user.PhoneNumber = updateUser.PhoneNo;
             }
+            _context.Update(user);
             _context.SaveChanges();
         }
     }
