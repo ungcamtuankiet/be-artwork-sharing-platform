@@ -1,5 +1,6 @@
 ﻿using be_artwork_sharing_platform.Core.Constancs;
 using be_artwork_sharing_platform.Core.DbContext;
+using be_artwork_sharing_platform.Core.Dtos.Artwork;
 using be_artwork_sharing_platform.Core.Dtos.Auth;
 using be_artwork_sharing_platform.Core.Dtos.General;
 using be_artwork_sharing_platform.Core.Entities;
@@ -313,6 +314,23 @@ namespace be_artwork_sharing_platform.Core.Services
             if (user is not null)
                 return user.FullName;
             return null;
+        }
+
+        public void UpdateUser(UpdateUser updateUser, string userId)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if(user is not null)
+            {
+                ApplicationUser _user = new ApplicationUser()
+                {
+                    Id = userId,
+                    FullName = updateUser.FullName,
+                    Email = updateUser.Email,
+                    PhoneNumber = updateUser.PhoneNo,
+                    Address = updateUser.Address,
+                };
+            }
+            _context.SaveChanges();
         }
     }
 }

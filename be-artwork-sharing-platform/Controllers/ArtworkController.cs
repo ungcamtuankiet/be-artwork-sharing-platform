@@ -20,13 +20,15 @@ namespace be_artwork_sharing_platform.Controllers
         private readonly IAuthService _authService;
         private readonly ILogService _logService;
         private readonly IMapper _mapper;
+        private readonly ICategoryService _categoryService;
 
-        public ArtworkController(IArtworkService artworkService, IAuthService authService, ILogService logService, IMapper mapper)
+        public ArtworkController(IArtworkService artworkService, IAuthService authService, ILogService logService, IMapper mapper, ICategoryService categoryService)
         {
             _artworkService = artworkService;
             _authService = authService;
             _logService = logService;
             _mapper = mapper;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
@@ -148,6 +150,19 @@ namespace be_artwork_sharing_platform.Controllers
             }
         }
 
-        
+        [HttpPut]
+        [Route("update-artwork")]
+        public IActionResult UpdateArtwork(long id, UpdateArtwork artworkDt)
+        {
+            try
+            {
+                _artworkService.UpdateArtwork(id, artworkDt);
+                return Ok("Update Successfully");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using be_artwork_sharing_platform.Core.Dtos.Auth;
+﻿using be_artwork_sharing_platform.Core.Dtos.Artwork;
+using be_artwork_sharing_platform.Core.Dtos.Auth;
 using be_artwork_sharing_platform.Core.Dtos.General;
+using be_artwork_sharing_platform.Core.Entities;
 using System.Security.Claims;
 
 namespace be_artwork_sharing_platform.Core.Interfaces
@@ -16,5 +18,6 @@ namespace be_artwork_sharing_platform.Core.Interfaces
         Task<string> GetCurrentUserId(string username);
         Task<string> GetCurrentUserName(string username);
         Task<IEnumerable<string>> GetUsernameListAsync();
+        void UpdateUser(UpdateUser updateUser, string userId);
     }
 }
