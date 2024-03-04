@@ -66,6 +66,8 @@ namespace be_artwork_sharing_platform.Core.DbContext
                 .HasOne(a => a.User)
                 .WithMany(u => u.Artworks)
                 .HasForeignKey(a => a.User_Id);
+
+
         }
     }
 }

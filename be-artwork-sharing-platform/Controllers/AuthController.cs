@@ -123,5 +123,16 @@ namespace be_artwork_sharing_platform.Controllers
             var usernames = await _authService.GetUsernameListAsync();
             return Ok(usernames);
         }
+
+        [HttpPut]
+        [Route("update-user")]
+        [Authorize(Roles = StaticUserRole.AdminCreatorCustomer)]
+        public async Task<IActionResult> UpdateUser(UpdateUser updateUser)
+        {
+            string userName = HttpContext.User.Identity.Name;
+            string userId = await _authService.GetCurrentUserId(userName);
+            _authService.UpdateUser(updateUser,userId);
+            return Ok("Update Successfully");
+        }
     }
 }

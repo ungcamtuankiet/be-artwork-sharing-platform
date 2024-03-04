@@ -62,7 +62,7 @@ namespace be_artwork_sharing_platform.Core.Services
             }
             #endregion
 
-            #region Sortingì
+            #region Sorting
             artworks = artworks.OrderBy(a => a.Name);
 
             if (!string.IsNullOrEmpty(sortBy))
@@ -116,6 +116,18 @@ namespace be_artwork_sharing_platform.Core.Services
             var artwork = _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");
             _context.Remove(artwork);
             return _context.SaveChanges();
+        }
+
+        public void UpdateArtwork(long id, UpdateArtwork updateArtwork)
+        {
+            var artwork = _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");
+            artwork.Name = updateArtwork.Name;
+            artwork.Category_Name = updateArtwork.Category_Name;
+            artwork.Description = updateArtwork.Description;
+            artwork.Url_Image = updateArtwork.Url_Image;
+            artwork.Price = updateArtwork.Price;
+            _context.Update(artwork);
+            _context.SaveChanges();
         }
     }
 }
