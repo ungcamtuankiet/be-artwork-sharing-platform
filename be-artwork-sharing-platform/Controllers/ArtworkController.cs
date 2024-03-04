@@ -126,7 +126,7 @@ namespace be_artwork_sharing_platform.Controllers
                 var result = _artworkService.Delete(id);
                 if(result > 0)
                 {
-                    _logService.SaveNewLog(userName, "Delete Artwork Successfully");
+                    _logService.SaveNewLog(userName, "Delete Artwork");
                     return Ok(new GeneralServiceResponseDto
                     {
                         IsSucceed = true,
@@ -152,10 +152,15 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpPut]
         [Route("update-artwork")]
-        public IActionResult UpdateArtwork(long id, UpdateArtwork artworkDt)
+        [Authorize(Roles = StaticUserRole.CREATOR)]
+        public async Task<IActionResult> UpdateArtwork(long id, UpdateArtwork artworkDt)
         {
             try
             {
+                string userName = HttpContext.User.Identity.Name;
+                string userId = await _authService.GetCurrentUserId(userName);
+                string userNameCurrent = await _authService.GetCurrentUserName(userName);
+                _logService.SaveNewLog(userName, "Update Artwork");
                 _artworkService.UpdateArtwork(id, artworkDt);
                 return Ok("Update Successfully");
             }

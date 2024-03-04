@@ -15,6 +15,7 @@ namespace be_artwork_sharing_platform.Core.DbContext
         public DbSet<Log> Logs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Artwork> Artworks { get; set; }
+        public DbSet<ApplicationUser> Users {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -120,12 +120,15 @@ namespace be_artwork_sharing_platform.Core.Services
 
         public void UpdateArtwork(long id, UpdateArtwork updateArtwork)
         {
-            var artwork = _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");
-            artwork.Name = updateArtwork.Name;
-            artwork.Category_Name = updateArtwork.Category_Name;
-            artwork.Description = updateArtwork.Description;
-            artwork.Url_Image = updateArtwork.Url_Image;
-            artwork.Price = updateArtwork.Price;
+            var artwork = _context.Artworks.FirstOrDefault(a => a.Id == id);
+            if(artwork is not null)
+            {
+                artwork.Name = updateArtwork.Name;
+                artwork.Category_Name = updateArtwork.Category_Name;
+                artwork.Description = updateArtwork.Description;
+                artwork.Url_Image = updateArtwork.Url_Image;
+                artwork.Price = updateArtwork.Price;
+            }
             _context.Update(artwork);
             _context.SaveChanges();
         }
