@@ -1,8 +1,12 @@
 ﻿using be_artwork_sharing_platform.Core.Constancs;
 using be_artwork_sharing_platform.Core.Dtos.Auth;
+using be_artwork_sharing_platform.Core.Dtos.General;
 using be_artwork_sharing_platform.Core.Interfaces;
+using FirebaseAdmin.Auth.Hash;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be_artwork_sharing_platform.Controllers
@@ -136,6 +140,52 @@ namespace be_artwork_sharing_platform.Controllers
             _logService.SaveNewLog(userName, "Update Information User");
             _authService.UpdateUser(updateUser,userId);
             return Ok("Update Successfully");
+        }
+
+        [HttpPut]
+        [Route("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(ChangePassword changePassword)
+        {
+            try
+            {
+                string userName = HttpContext.User.Identity.Name;
+                string userId = await _authService.GetCurrentUserId(userName);
+                string PasswordCurrent = await _authService.GetPasswordCurrentUserName(userName);
+                bool checkOldPassword = CheckPassword.VerifyPassword(PasswordCurrent ,changePassword.OldPassword);
+                if (checkOldPassword)
+                {
+                    if (changePassword.NewPassword != changePassword.ConfirmNewPassword)
+                    {
+                        return BadRequest(new GeneralServiceResponseDto()
+                        {
+                            IsSucceed = false,
+                            StatusCode = 400,
+                            Message = "ConfirmPassword not match NewPassword"
+                        });
+                    }
+                    _authService.ChangePassword(changePassword, userId);
+                    return Ok(new GeneralServiceResponseDto()
+                    {
+                        IsSucceed = true,
+                        StatusCode = 200,
+                        Message = "Change Password Successfully"
+                    });
+                }
+                else
+                {
+                    return BadRequest(new GeneralServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        StatusCode = 400,
+                        Message = "OldPassword incorrect"
+                    });
+                }   
+            }
+            catch
+            {
+                return BadRequest("Error to change password");
+            }
         }
     }
 }

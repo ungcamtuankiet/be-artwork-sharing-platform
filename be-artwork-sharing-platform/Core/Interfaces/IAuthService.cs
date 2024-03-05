@@ -17,7 +17,9 @@ namespace be_artwork_sharing_platform.Core.Interfaces
         Task<UserInfoResult?> GetUserDetailsByUserNameAsyncs(string userName);
         Task<string> GetCurrentUserId(string username);
         Task<string> GetCurrentUserName(string username);
+        Task<string> GetPasswordCurrentUserName(string username);
         Task<IEnumerable<string>> GetUsernameListAsync();
         void UpdateUser(UpdateUser updateUser, string userId);
+        void ChangePassword(ChangePassword changePassword, string userID);
     }
 }
