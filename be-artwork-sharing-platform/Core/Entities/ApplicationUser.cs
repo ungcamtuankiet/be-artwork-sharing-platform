@@ -14,6 +14,7 @@ namespace be_artwork_sharing_platform.Core.Entities
 
         //Relationship
         public List<Artwork> Artworks { get; set; }
+        public List<Favourite> Favorites { get; set; }
 
     }
 }

@@ -5,6 +5,7 @@ using be_artwork_sharing_platform.Core.Dtos.Auth;
 using be_artwork_sharing_platform.Core.Dtos.General;
 using be_artwork_sharing_platform.Core.Entities;
 using be_artwork_sharing_platform.Core.Interfaces;
+using FirebaseAdmin.Auth.Hash;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -85,7 +86,6 @@ namespace be_artwork_sharing_platform.Core.Services
                 Address = registerDto.Address,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-
             var createUserResult = await _userManager.CreateAsync(newUser, registerDto.Password);
 
             if (!createUserResult.Succeeded)
@@ -316,6 +316,14 @@ namespace be_artwork_sharing_platform.Core.Services
             return null;
         }
 
+        public async Task<string> GetPasswordCurrentUserName(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user is not null)
+                return user.PasswordHash;
+            return null;
+        }
+
         public void UpdateUser(UpdateUser updateUser, string userId)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
@@ -325,6 +333,17 @@ namespace be_artwork_sharing_platform.Core.Services
                 user.Email = updateUser.Email;
                 user.Address = updateUser.Address;
                 user.PhoneNumber = updateUser.PhoneNo;
+            }
+            _context.Update(user);
+            _context.SaveChanges();
+        }
+
+        public void ChangePassword(ChangePassword changePassword, string userID)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userID));
+            if (user is not null)
+            {
+                user.PasswordHash = CheckPassword.HashPassword(changePassword.NewPassword);
             }
             _context.Update(user);
             _context.SaveChanges();

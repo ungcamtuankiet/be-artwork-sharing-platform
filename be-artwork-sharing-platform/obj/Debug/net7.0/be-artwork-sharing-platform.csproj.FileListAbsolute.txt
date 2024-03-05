@@ -264,3 +264,5 @@ C:\Learning\SWP\be-artwork-shraing-platform\be-artwork-sharing-platform\bin\Debu
 C:\Learning\SWP\be-artwork-shraing-platform\be-artwork-sharing-platform\bin\Debug\net7.0\Google.Apis.Auth.dll
 C:\Learning\SWP\be-artwork-shraing-platform\be-artwork-sharing-platform\bin\Debug\net7.0\Google.Apis.Core.dll
 C:\Learning\SWP\be-artwork-shraing-platform\be-artwork-sharing-platform\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Learning\SWP\be-artwork-shraing-platform\be-artwork-sharing-platform\bin\Debug\net7.0\BCrypt.Net-Next.dll
+C:\Learning\SWP\be-artwork-shraing-platform\be-artwork-sharing-platform\bin\Debug\net7.0\Microsoft.AspNet.Identity.Core.dll
