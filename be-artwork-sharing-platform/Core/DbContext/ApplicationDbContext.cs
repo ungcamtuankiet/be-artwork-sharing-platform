@@ -16,6 +16,7 @@ namespace be_artwork_sharing_platform.Core.DbContext
         public DbSet<Category> Categories { get; set; }
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<ApplicationUser> Users {  get; set; }
+        public DbSet<Favourite> Favorites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -68,6 +69,11 @@ namespace be_artwork_sharing_platform.Core.DbContext
                 .WithMany(u => u.Artworks)
                 .HasForeignKey(a => a.User_Id);
 
+            builder.Entity<Favourite>()
+                .ToTable("favourites")
+                .HasOne(f => f.User)
+                .WithMany(f => f.Favorites)
+                .HasForeignKey(f => f.User_Id);
 
         }
     }

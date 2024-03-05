@@ -2,6 +2,7 @@
 using be_artwork_sharing_platform.Core.Dtos.Artwork;
 using be_artwork_sharing_platform.Core.Dtos.Auth;
 using be_artwork_sharing_platform.Core.Dtos.Category;
+using be_artwork_sharing_platform.Core.Dtos.Favourite;
 using be_artwork_sharing_platform.Core.Entities;
 
 namespace be_artwork_sharing_platform.Core.AutoMapperConfig
@@ -18,6 +19,9 @@ namespace be_artwork_sharing_platform.Core.AutoMapperConfig
 
             //User
             CreateMap<UpdateUser, ApplicationUser>();
+
+            //Favourite
+            CreateMap<Favourite, FavouriteDto>();
         }
     }
 }
