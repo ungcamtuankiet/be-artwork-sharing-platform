@@ -257,9 +257,6 @@ namespace be_artwork_sharing_platform.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("FavouriteId")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -291,8 +288,6 @@ namespace be_artwork_sharing_platform.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Category_Id");
-
-                    b.HasIndex("FavouriteId");
 
                     b.HasIndex("User_Id");
 
@@ -357,9 +352,11 @@ namespace be_artwork_sharing_platform.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Artwork_Id");
+
                     b.HasIndex("User_Id");
 
-                    b.ToTable("favourites", (string)null);
+                    b.ToTable("favourites");
                 });
 
             modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Log", b =>
@@ -451,10 +448,6 @@ namespace be_artwork_sharing_platform.Migrations
                         .WithMany("Artworks")
                         .HasForeignKey("Category_Id");
 
-                    b.HasOne("be_artwork_sharing_platform.Core.Entities.Favourite", null)
-                        .WithMany("Artworks")
-                        .HasForeignKey("FavouriteId");
-
                     b.HasOne("be_artwork_sharing_platform.Core.Entities.ApplicationUser", "User")
                         .WithMany("Artworks")
                         .HasForeignKey("User_Id")
@@ -468,11 +461,19 @@ namespace be_artwork_sharing_platform.Migrations
 
             modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Favourite", b =>
                 {
+                    b.HasOne("be_artwork_sharing_platform.Core.Entities.Artwork", "Artworks")
+                        .WithMany("Favourites")
+                        .HasForeignKey("Artwork_Id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("be_artwork_sharing_platform.Core.Entities.ApplicationUser", "User")
                         .WithMany("Favorites")
                         .HasForeignKey("User_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Artworks");
 
                     b.Navigation("User");
                 });
@@ -484,12 +485,12 @@ namespace be_artwork_sharing_platform.Migrations
                     b.Navigation("Favorites");
                 });
 
-            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Category", b =>
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Artwork", b =>
                 {
-                    b.Navigation("Artworks");
+                    b.Navigation("Favourites");
                 });
 
-            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Favourite", b =>
+            modelBuilder.Entity("be_artwork_sharing_platform.Core.Entities.Category", b =>
                 {
                     b.Navigation("Artworks");
                 });

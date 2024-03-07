@@ -6,6 +6,6 @@ namespace be_artwork_sharing_platform.Core.Interfaces
 {
     public interface IFavouriteService
     {
-        Task AddToFavourite(FavouriteDto favouriteDto, string userId, long artworkId);
+        void AddToFavourite(string userId, long artworkId);
     }
 }

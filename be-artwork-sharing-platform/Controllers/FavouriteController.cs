@@ -31,15 +31,14 @@ namespace be_artwork_sharing_platform.Controllers
         [HttpPost]
         [Route("add-favourite")]
         [Authorize(Roles = StaticUserRole.CUSTOMER)]
-        public async Task<IActionResult> AddFavourite(long artwork_Id)
+        public async Task<IActionResult> AddFavourite(long artwork_Id, FavouriteDto favouriteDto)
         {
             try
             {
                 string userName = HttpContext.User.Identity.Name;
                 string userId = await _authService.GetCurrentUserId(userName);
                 string userNameCurrent = await _authService.GetCurrentUserName(userName);
-                FavouriteDto favouriteDto = new FavouriteDto();
-                var checkArtwork = _context.Artworks.FirstOrDefault(a => a.Id == artwork_Id);
+                var checkArtwork = _context.Artworks.Where(a => a.Id == artwork_Id);
                 if (checkArtwork == null)
                 {
                     return BadRequest(new GeneralServiceResponseDto()
@@ -51,32 +50,27 @@ namespace be_artwork_sharing_platform.Controllers
                 }
                 else
                 {
-                    var checkUser = _context.Favorites.FirstOrDefault(f => f.User_Id == userId);
-                    if(checkUser == null)
+                    var addArtworkToFavourite = _context.Favorites.FirstOrDefault(f => f.Artwork_Id == artwork_Id);
+                    if (addArtworkToFavourite != null)
                     {
-                        var addArtworkToFavourite = _context.Favorites.FirstOrDefault(f => f.Artwork_Id == artwork_Id);
-                        if (addArtworkToFavourite != null)
+                        return NotFound(new GeneralServiceResponseDto()
                         {
-                            return NotFound(new GeneralServiceResponseDto()
-                            {
-                                IsSucceed = false,
-                                StatusCode = 400,
-                                Message = "Artwork already have in your Favourite"
-                            });
-                        }
-                        else
-                        {
-                            _favouriteService.AddToFavourite(favouriteDto, userId, artwork_Id);
-                            _logService.SaveNewLog(userNameCurrent, "Add Artwork to Favourite");
-                            return Ok(new GeneralServiceResponseDto()
-                            {
-                                IsSucceed = true,
-                                StatusCode = 200,
-                                Message = "Add Artwork to your favourite successfully"
-                            });
-                        }
+                            IsSucceed = false,
+                            StatusCode = 400,
+                            Message = "Artwork already have in your Favourite"
+                        });
                     }
-                    return BadRequest();
+                    else
+                    {
+                        _favouriteService.AddToFavourite(userId, artwork_Id);
+                        _logService.SaveNewLog(userNameCurrent, "Add Artwork to Favourite");
+                        return Ok(new GeneralServiceResponseDto()
+                        {
+                            IsSucceed = true,
+                            StatusCode = 200,
+                            Message = "Add Artwork to your favourite successfully"
+                        });
+                    }
                 }
             }
             catch

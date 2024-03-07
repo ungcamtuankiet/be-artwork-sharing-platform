@@ -137,8 +137,8 @@ namespace be_artwork_sharing_platform.Controllers
         {
             string userName = HttpContext.User.Identity.Name;
             string userId = await _authService.GetCurrentUserId(userName);
-            _logService.SaveNewLog(userName, "Update Information User");
-            _authService.UpdateUser(updateUser,userId);
+            await _logService.SaveNewLog(userName, "Update Information User");
+            await _authService.UpdateUser(updateUser,userId);
             return Ok("Update Successfully");
         }
 

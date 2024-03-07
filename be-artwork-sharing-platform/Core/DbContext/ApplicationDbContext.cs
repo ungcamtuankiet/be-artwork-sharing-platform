@@ -70,11 +70,14 @@ namespace be_artwork_sharing_platform.Core.DbContext
                 .HasForeignKey(a => a.User_Id);
 
             builder.Entity<Favourite>()
-                .ToTable("favourites")
                 .HasOne(f => f.User)
                 .WithMany(f => f.Favorites)
-                .HasForeignKey(f => f.User_Id);
+                .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<Favourite>()
+                .HasOne(f => f.Artworks)
+                .WithMany(f => f.Favourites)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

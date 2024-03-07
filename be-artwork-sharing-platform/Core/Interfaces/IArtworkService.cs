@@ -13,6 +13,6 @@ namespace be_artwork_sharing_platform.Core.Interfaces
         IEnumerable<Artwork> GetArtworkByUserId(string user_Id);
         Task CreateArtwork(CreateArtwork artworkDto, string user_Id, string user_Name);
         int Delete(long id);
-        void UpdateArtwork(long id, UpdateArtwork updateArtwork);
+        Task UpdateArtwork(long id, UpdateArtwork updateArtwork);
     }
 }

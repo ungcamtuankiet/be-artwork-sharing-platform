@@ -18,6 +18,7 @@ namespace be_artwork_sharing_platform.Core.Entities
         public ApplicationUser User { get; set; }
         [ForeignKey("Category_Id")]
         public Category Category { get; set; }
+        public List<Favourite> Favourites { get; set; }
     }
     
 }
