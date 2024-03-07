@@ -164,6 +164,15 @@ namespace be_artwork_sharing_platform.Controllers
                             Message = "ConfirmPassword not match NewPassword"
                         });
                     }
+                    else if(changePassword.OldPassword == changePassword.NewPassword)
+                    {
+                        return BadRequest(new GeneralServiceResponseDto()
+                        {
+                            IsSucceed = false,
+                            StatusCode = 400,
+                            Message = "New Password cannot be the same as the Old Password"
+                        });
+                    }
                     _authService.ChangePassword(changePassword, userId);
                     return Ok(new GeneralServiceResponseDto()
                     {

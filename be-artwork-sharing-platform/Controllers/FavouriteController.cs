@@ -31,14 +31,15 @@ namespace be_artwork_sharing_platform.Controllers
         [HttpPost]
         [Route("add-favourite")]
         [Authorize(Roles = StaticUserRole.CUSTOMER)]
-        public async Task<IActionResult> AddFavourite(long artwork_Id, FavouriteDto favouriteDto)
+        public async Task<IActionResult> AddFavourite(long artwork_Id)
         {
             try
             {
                 string userName = HttpContext.User.Identity.Name;
                 string userId = await _authService.GetCurrentUserId(userName);
                 string userNameCurrent = await _authService.GetCurrentUserName(userName);
-                var checkArtwork = _context.Artworks.Where(a => a.Id == artwork_Id);
+                FavouriteDto favouriteDto = new FavouriteDto();
+                var checkArtwork = _context.Artworks.FirstOrDefault(a => a.Id == artwork_Id);
                 if (checkArtwork == null)
                 {
                     return BadRequest(new GeneralServiceResponseDto()
@@ -76,6 +77,24 @@ namespace be_artwork_sharing_platform.Controllers
             catch
             {
                 return BadRequest("Something wrong");
+            }
+        }
+
+        [HttpDelete]
+        [Route("remove-artwork")]
+        [Authorize(Roles = StaticUserRole.CUSTOMER)]
+        public async Task<IActionResult> RemoveArtwork(long favourite_Id)
+        {
+            try
+            {
+                string userName = HttpContext.User.Identity.Name;
+                string userId = await _authService.GetCurrentUserId(userName);
+                _favouriteService.RemoveArtwork(favourite_Id, userId);
+                return Ok("Removed the Artwork from your favorites successfully");
+            }
+            catch
+            {
+                return BadRequest();
             }
         }
     }
