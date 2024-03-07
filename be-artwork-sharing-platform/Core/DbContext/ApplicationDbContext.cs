@@ -78,6 +78,7 @@ namespace be_artwork_sharing_platform.Core.DbContext
                 .HasOne(f => f.Artworks)
                 .WithMany(f => f.Favourites)
                 .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

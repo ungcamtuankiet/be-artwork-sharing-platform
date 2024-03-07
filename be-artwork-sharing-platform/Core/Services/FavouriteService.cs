@@ -11,7 +11,13 @@ namespace be_artwork_sharing_platform.Core.Services
     public class FavouriteService : IFavouriteService
     {
         private readonly ApplicationDbContext _context;
-        public void AddToFavourite(string userId, long artworkId)
+
+        public FavouriteService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task AddToFavourite(string userId, long artworkId)
         {
             var favourite = new Favourite
             {
@@ -21,5 +27,17 @@ namespace be_artwork_sharing_platform.Core.Services
             _context.Favorites.Add(favourite);
             _context.SaveChanges();
         }
+
+        public async Task RemoveArtwork(long favourite_Id, string user_Id)
+        {
+            var favourite = await _context.Favorites.FirstOrDefaultAsync(f => f.Id == favourite_Id && f.User_Id == user_Id);
+            if (favourite != null)
+            {
+                _context.Favorites.Remove(favourite);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
     }
 }
