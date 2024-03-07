@@ -118,7 +118,7 @@ namespace be_artwork_sharing_platform.Core.Services
             return _context.SaveChanges();
         }
 
-        public void UpdateArtwork(long id, UpdateArtwork updateArtwork)
+        public async Task UpdateArtwork(long id, UpdateArtwork updateArtwork)
         {
             var artwork = _context.Artworks.FirstOrDefault(a => a.Id == id);
             if(artwork is not null)

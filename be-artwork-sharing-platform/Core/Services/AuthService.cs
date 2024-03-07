@@ -312,6 +312,14 @@ namespace be_artwork_sharing_platform.Core.Services
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
             if (user is not null)
+                return user.UserName;
+            return null;
+        }
+
+        public async Task<string> GetCurrentFullName(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user is not null)
                 return user.FullName;
             return null;
         }
@@ -324,7 +332,7 @@ namespace be_artwork_sharing_platform.Core.Services
             return null;
         }
 
-        public void UpdateUser(UpdateUser updateUser, string userId)
+        public async Task UpdateUser(UpdateUser updateUser, string userId)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
             if(user is not null)

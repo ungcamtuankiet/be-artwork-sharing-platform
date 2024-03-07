@@ -17,7 +17,7 @@ namespace be_artwork_sharing_platform.Core.Dtos.Auth
         public string Email { get; set; }
 
         [Required]
-        [StringLength(20, ErrorMessage = "Password must be at least 6 characters", MinimumLength = 6)]
+        [StringLength(20, ErrorMessage = "Password must be at least 8 characters and maximum 20 characters", MinimumLength = 8)]
         public string Password { get; set; }
         public string Address { get; set; } = string.Empty;
         [Required]

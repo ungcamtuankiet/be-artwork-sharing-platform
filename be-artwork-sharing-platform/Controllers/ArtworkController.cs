@@ -9,6 +9,7 @@ using be_artwork_sharing_platform.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
 
 namespace be_artwork_sharing_platform.Controllers
 {
@@ -160,8 +161,8 @@ namespace be_artwork_sharing_platform.Controllers
                 string userName = HttpContext.User.Identity.Name;
                 string userId = await _authService.GetCurrentUserId(userName);
                 string userNameCurrent = await _authService.GetCurrentUserName(userName);
-                _logService.SaveNewLog(userName, "Update Artwork");
-                _artworkService.UpdateArtwork(id, artworkDt);
+                await _logService.SaveNewLog(userName, "Update Artwork");
+                await _artworkService.UpdateArtwork(id, artworkDt);
                 return Ok("Update Successfully");
             }
             catch
