@@ -28,16 +28,15 @@ namespace be_artwork_sharing_platform.Core.Services
             _context.SaveChanges();
         }
 
-        public async Task RemoveArtwork(long favourite_Id, string user_Id)
+        public int RemoveArtwork(long favourite_Id, string user_Id)
         {
-            var favourite = await _context.Favorites.FirstOrDefaultAsync(f => f.Id == favourite_Id && f.User_Id == user_Id);
-            if (favourite != null)
+            var favourite = _context.Favorites.FirstOrDefault(f => f.Id == favourite_Id && f.User_Id == user_Id);
+            if (favourite == null) return 0;
+            else
             {
-                _context.Favorites.Remove(favourite);
-                await _context.SaveChangesAsync();
+                _context.Remove(favourite);
+                return _context.SaveChanges();
             }
         }
-
-
     }
 }
