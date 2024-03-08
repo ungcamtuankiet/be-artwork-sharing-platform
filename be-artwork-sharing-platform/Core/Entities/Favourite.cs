@@ -9,9 +9,9 @@ namespace be_artwork_sharing_platform.Core.Entities
         public long Artwork_Id { get; set; }
         //Relation ship
         [ForeignKey("User_Id")]
-        public ApplicationUser User { get; set; } 
-        
+        public ApplicationUser User { get; set; }
+
         [ForeignKey("Artwork_Id")]
-        public Artwork Artworks { get; set; }
+        public Artwork Artworks { get; set; } 
     }
 }
