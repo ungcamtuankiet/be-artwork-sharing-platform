@@ -16,16 +16,18 @@ namespace be_artwork_sharing_platform.Controllers
     public class FavouriteController : ControllerBase
     {
         private readonly IFavouriteService _favouriteService;
+        private readonly IArtworkService _artworkService;
         private readonly IAuthService _authService;
         private readonly ILogService _logService;
         private readonly ApplicationDbContext _context;
 
-        public FavouriteController(IFavouriteService favouriteService, IAuthService authService, ILogService logService, ApplicationDbContext context)
+        public FavouriteController(IFavouriteService favouriteService, IAuthService authService, ILogService logService, ApplicationDbContext context, IArtworkService artworkService)
         {
             _favouriteService = favouriteService;
             _authService = authService;
             _logService = logService;
             _context = context;
+            _artworkService = artworkService;
         }
 
         [HttpPost]
@@ -54,7 +56,7 @@ namespace be_artwork_sharing_platform.Controllers
                     var addArtworkToFavourite = _context.Favorites.FirstOrDefault(f => f.Artwork_Id == artwork_Id && f.User_Id == userId);
                     if (addArtworkToFavourite != null)
                     {
-                        return NotFound(new GeneralServiceResponseDto()
+                        return BadRequest(new GeneralServiceResponseDto()
                         {
                             IsSucceed = false,
                             StatusCode = 400,
@@ -112,6 +114,36 @@ namespace be_artwork_sharing_platform.Controllers
             catch
             {
                 return BadRequest("Remove Artwork from your favourite failed");
+            }
+        }
+
+        [HttpGet]
+        [Route("get-favourite")]
+        [Authorize(Roles = StaticUserRole.CUSTOMER)]
+        public async Task<IActionResult> GetFavourite()
+        {
+            try
+            {
+                string userName = HttpContext.User.Identity.Name;
+                string user_Id = await _authService.GetCurrentUserId(userName);
+                var favourites = _favouriteService.GetFavouritesByUserId(user_Id);
+                if (favourites == null)
+                {
+                    return NotFound(new GeneralServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        StatusCode = 204,
+                        Message = "You do not have Artwork in your favourite"
+                    });
+                }
+                else
+                {
+                    return Ok(favourites);
+                }
+            }
+            catch
+            {
+                return BadRequest();
             }
         }
     }
