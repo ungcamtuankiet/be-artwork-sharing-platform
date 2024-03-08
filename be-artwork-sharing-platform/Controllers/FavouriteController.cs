@@ -51,7 +51,7 @@ namespace be_artwork_sharing_platform.Controllers
                 }
                 else
                 {
-                    var addArtworkToFavourite = _context.Favorites.FirstOrDefault(f => f.Artwork_Id == artwork_Id);
+                    var addArtworkToFavourite = _context.Favorites.FirstOrDefault(f => f.Artwork_Id == artwork_Id && f.User_Id == userId);
                     if (addArtworkToFavourite != null)
                     {
                         return NotFound(new GeneralServiceResponseDto()
@@ -88,13 +88,30 @@ namespace be_artwork_sharing_platform.Controllers
             try
             {
                 string userName = HttpContext.User.Identity.Name;
-                string userId = await _authService.GetCurrentUserId(userName);
-                _favouriteService.RemoveArtwork(favourite_Id, userId);
-                return Ok("Removed the Artwork from your favorites successfully");
+                string user_Id = await _authService.GetCurrentUserId(userName);
+                var result = _favouriteService.RemoveArtwork(favourite_Id, user_Id);
+                if (result == 0)
+                {
+                    return BadRequest(new GeneralServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        StatusCode = 404,
+                        Message = "You can not remove this artwork"
+                    });
+                }
+                else
+                {
+                    return Ok(new GeneralServiceResponseDto()
+                    {
+                        IsSucceed = true,
+                        StatusCode = 200,
+                        Message = "Remove Artwork from your favourite successfully"
+                    });
+                }
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Remove Artwork from your favourite failed");
             }
         }
     }
