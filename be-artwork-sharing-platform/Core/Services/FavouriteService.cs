@@ -28,6 +28,7 @@ namespace be_artwork_sharing_platform.Core.Services
                     .Select(f => new GetFavourite
                     {
                         Favourite_Id = f.Id,
+                        Artwork_Id = f.Artworks.Id,
                         Category_Name = f.Artworks.Category_Name,
                         User_Name = f.Artworks.User_Name,
                         Name = f.Artworks.Name,
