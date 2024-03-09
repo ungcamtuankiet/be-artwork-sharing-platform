@@ -7,7 +7,7 @@ on:
     - main
 
 env:
-  AZURE_WEBAPP_NAME: artworksharingplatform
+  AZURE_WEBAPP_NAME: artworkplatform
   AZURE_WEBAPP_PACKAGE_PATH: "./publish"
 
 jobs:
