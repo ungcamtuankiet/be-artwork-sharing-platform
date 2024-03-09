@@ -40,7 +40,7 @@ namespace be_artwork_sharing_platform.Controllers
                 string userName = HttpContext.User.Identity.Name;
                 string userId = await _authService.GetCurrentUserId(userName);
                 string userNameCurrent = await _authService.GetCurrentUserName(userName);
-                FavouriteDto favouriteDto = new FavouriteDto();
+                Favourite favouriteDto = new Favourite();
                 var checkArtwork = _context.Artworks.FirstOrDefault(a => a.Id == artwork_Id);
                 if (checkArtwork == null)
                 {
@@ -65,7 +65,7 @@ namespace be_artwork_sharing_platform.Controllers
                     }
                     else
                     {
-                        _favouriteService.AddToFavourite(userId, artwork_Id);
+                        _favouriteService.AddToFavourite(userId, artwork_Id, favouriteDto.Id);
                         _logService.SaveNewLog(userNameCurrent, "Add Artwork to Favourite");
                         return Ok(new GeneralServiceResponseDto()
                         {
