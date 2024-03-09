@@ -28,6 +28,7 @@ namespace be_artwork_sharing_platform.Core.Services
                     .Select(f => new GetFavourite
                     {
                         Favourite_Id = f.Id,
+                        Artwork_Id = f.Artworks.Id,
                         Category_Name = f.Artworks.Category_Name,
                         User_Name = f.Artworks.User_Name,
                         Name = f.Artworks.Name,
@@ -43,10 +44,11 @@ namespace be_artwork_sharing_platform.Core.Services
             }
             return null;
         }
-        public async Task AddToFavourite(string userId, long artworkId)
+        public async Task AddToFavourite(string userId, long artworkId, long favourite_Id)
         {
             var favourite = new Favourite
             {
+                Id = favourite_Id,
                 Artwork_Id = artworkId,
                 User_Id = userId,
             };
