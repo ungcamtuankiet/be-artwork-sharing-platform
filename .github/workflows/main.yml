@@ -19,10 +19,10 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Restore
-        run: dotnet restore ./CurrentTimeService.sln
+        run: dotnet restore ./be-artwork-sharing-platform.sln
 
       - name: Build
-        run: dotnet build ./CurrentTimeService.sln --configuration Release --no-restore
+        run: dotnet build ./be-artwork-sharing-platform.sln --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ./CurrentTimeService.sln --configuration Release --no-build
+        run: dotnet publish ./be-artwork-sharing-platform.sln --configuration Release --no-build
