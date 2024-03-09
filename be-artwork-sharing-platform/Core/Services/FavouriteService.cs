@@ -12,12 +12,10 @@ namespace be_artwork_sharing_platform.Core.Services
     public class FavouriteService : IFavouriteService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IArtworkService _artworkService;
 
-        public FavouriteService(ApplicationDbContext context, IArtworkService artworkService)
+        public FavouriteService(ApplicationDbContext context)
         {
             _context = context;
-            _artworkService = artworkService;
         }
 
         public IEnumerable<GetFavourite> GetFavouritesByUserId(string user_Id)
@@ -29,6 +27,7 @@ namespace be_artwork_sharing_platform.Core.Services
                 var favourites = _context.Favorites.Where(f => f.User_Id == user_Id)
                     .Select(f => new GetFavourite
                     {
+                        Favourite_Id = f.Id,
                         Category_Name = f.Artworks.Category_Name,
                         User_Name = f.Artworks.User_Name,
                         Name = f.Artworks.Name,

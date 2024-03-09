@@ -295,6 +295,8 @@ namespace be_artwork_sharing_platform.Core.Services
                 FullName = user.FullName,
                 UserName = user.UserName,
                 Email = user.Email,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
                 CreatedAt = user.CreatedAt,
                 Roles = roles
             };

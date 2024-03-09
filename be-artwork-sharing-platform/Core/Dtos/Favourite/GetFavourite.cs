@@ -2,6 +2,7 @@
 {
     public class GetFavourite
     {
+        public long Favourite_Id { get; set; }
         public string Category_Name { get; set; }
         public string User_Name { get; set; }
         public string Name { get; set; }
