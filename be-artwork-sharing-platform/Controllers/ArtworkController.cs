@@ -34,9 +34,9 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpGet]
         [Route("get-all")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var artworks = _artworkService.GetAll();
+            var artworks = await _artworkService.GetAll();
             if (artworks is null)
                 return null;
             return Ok(artworks);
@@ -44,9 +44,9 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpPost]
         [Route("search")]
-        public IActionResult Search(string? search,string? searchBy, double? from, double? to, string? sortBy)
+        public async Task<IActionResult> Search(string? search,string? searchBy, double? from, double? to, string? sortBy)
         {
-            var artworks = _artworkService.SearchArtwork(search, searchBy, from, to, sortBy);
+            var artworks = await _artworkService.SearchArtwork(search, searchBy, from, to, sortBy);
             if (artworks is null)
                 return NotFound("Artworks not available");
             return Ok(_mapper.Map<List<ArtworkDto>>(artworks));
@@ -66,11 +66,11 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetById(long id)
+        public async Task<IActionResult> GetById(long id)
         {
             try
             {
-                var artwork = _artworkService.GetById(id);
+                var artwork = await _artworkService.GetById(id);
                 if(artwork is null)
                     return NotFound(new GeneralServiceResponseDto
                     {
