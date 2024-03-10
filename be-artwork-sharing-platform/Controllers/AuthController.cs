@@ -1,6 +1,7 @@
 ﻿using be_artwork_sharing_platform.Core.Constancs;
 using be_artwork_sharing_platform.Core.Dtos.Auth;
 using be_artwork_sharing_platform.Core.Dtos.General;
+using be_artwork_sharing_platform.Core.Dtos.User;
 using be_artwork_sharing_platform.Core.Interfaces;
 using FirebaseAdmin.Auth.Hash;
 using Microsoft.AspNet.Identity;
@@ -16,12 +17,10 @@ namespace be_artwork_sharing_platform.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly ILogService _logService;
 
-        public AuthController(IAuthService authService, ILogService logService)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _logService = logService;
         }
 
         //Route -> Seed Roles to DB
@@ -47,17 +46,31 @@ namespace be_artwork_sharing_platform.Controllers
         [Route("login")]
         public async Task<ActionResult<LoginServiceResponceDto>> Login([FromBody] LoginDto loginDto)
         {
-            var loginResult = await _authService.LoginAsync(loginDto);
-
-            if (loginResult is null)
+            try
             {
-                return Unauthorized("Your credentials are invalid. Please contact to an Admin");
+                bool checkStatusUser = await _authService.GetStatusUser(loginDto.UserName);
+                if(checkStatusUser)
+                {
+                    var loginResult = await _authService.LoginAsync(loginDto);
+                    if (loginResult is null)
+                    {
+                        return Unauthorized("Your credentials are invalid. Please contact to an Admin");
+                    }
+                    return Ok(loginResult);
+                }
+                else
+                {
+                    return BadRequest("Your account has been locked");
+                }
             }
-
-            return Ok(loginResult);
+                
+            catch
+            {
+                return BadRequest("Login Failed");
+            }
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [Route("update-role")]
         [Authorize(Roles = StaticUserRole.ADMIN)]
         public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleDto updateRoleDto)
@@ -72,7 +85,7 @@ namespace be_artwork_sharing_platform.Controllers
             {
                 return StatusCode(updateRoleResult.StatusCode, updateRoleResult.Message);
             }
-        }
+        }*/
 
         [HttpPost]
         [Route("me")]
@@ -93,107 +106,6 @@ namespace be_artwork_sharing_platform.Controllers
             catch (Exception)
             {
                 return Unauthorized("InvalidToken");
-            }
-        }
-
-        //Route -> List of all users with details
-        [HttpGet]
-        [Route("users")]
-        public async Task<ActionResult<IEnumerable<UserInfoResult>>> GetUsersList()
-        {
-            var usersList = await _authService.GetUserListAsync();
-            return Ok(usersList);
-        }
-
-        //Route -> Get User by Username
-        [HttpGet]
-        [Route("users/{userName}")]
-        public async Task<ActionResult<UserInfoResult>> GetUserDetailByUserName([FromRoute] string userName)
-        {
-            var user = await _authService.GetUserDetailsByUserNameAsyncs(userName);
-            if (user is not null)
-            {
-                return Ok(user);
-            }
-            else
-            {
-                return NotFound("UseName not found");
-            }
-        }
-
-        //Route -> Get list of usernames for send message
-        [HttpGet]
-        [Route("usernames")]
-        public async Task<ActionResult<IEnumerable<string>>> GetUserNameList()
-        {
-            var usernames = await _authService.GetUsernameListAsync();
-            return Ok(usernames);
-        }
-
-        [HttpPut]
-        [Route("update-user")]
-        [Authorize(Roles = StaticUserRole.AdminCreatorCustomer)]
-        public async Task<IActionResult> UpdateUser(UpdateUser updateUser)
-        {
-            string userName = HttpContext.User.Identity.Name;
-            string userId = await _authService.GetCurrentUserId(userName);
-            await _logService.SaveNewLog(userName, "Update Information User");
-            await _authService.UpdateUser(updateUser,userId);
-            return Ok("Update Successfully");
-        }
-
-        [HttpPut]
-        [Route("change-password")]
-        [Authorize]
-        public async Task<IActionResult> ChangePassword(ChangePassword changePassword)
-        {
-            try
-            {
-                string userName = HttpContext.User.Identity.Name;
-                string userId = await _authService.GetCurrentUserId(userName);
-                string PasswordCurrent = await _authService.GetPasswordCurrentUserName(userName);
-                bool checkOldPassword = CheckPassword.VerifyPassword(PasswordCurrent ,changePassword.OldPassword);
-                if (checkOldPassword)
-                {
-                    if (changePassword.NewPassword != changePassword.ConfirmNewPassword)
-                    {
-                        return BadRequest(new GeneralServiceResponseDto()
-                        {
-                            IsSucceed = false,
-                            StatusCode = 400,
-                            Message = "ConfirmPassword not match NewPassword"
-                        });
-                    }
-                    else if(changePassword.OldPassword == changePassword.NewPassword)
-                    {
-                        return BadRequest(new GeneralServiceResponseDto()
-                        {
-                            IsSucceed = false,
-                            StatusCode = 400,
-                            Message = "New Password cannot be the same as the Old Password"
-                        });
-                    }
-                    _authService.ChangePassword(changePassword, userId);
-                    return Ok(new GeneralServiceResponseDto()
-                    {
-                        IsSucceed = true,
-                        StatusCode = 200,
-                        Message = "Change Password Successfully"
-                    });
-                }
-                else
-                {
-                    return BadRequest(new GeneralServiceResponseDto()
-                    {
-                        IsSucceed = false,
-                        StatusCode = 400,
-                        Message = "OldPassword incorrect"
-                    });
-                }   
-            }
-            catch
-            {
-                return BadRequest("Error to change password");
             }
         }
     }

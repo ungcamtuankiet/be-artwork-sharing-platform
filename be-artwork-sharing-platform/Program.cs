@@ -34,6 +34,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IArtworkService, ArtworkService>();
 builder.Services.AddScoped<IFavouriteService, FavouriteService>();
+builder.Services.AddScoped<IRequestOrderService, RequestOrderService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Add Identity
 builder.Services
@@ -122,8 +124,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-//GET UTC
-app.MapGet("time/utc", () => Results.Ok(DateTime.UtcNow));
 
 app.Run();

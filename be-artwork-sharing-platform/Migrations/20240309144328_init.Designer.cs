@@ -12,7 +12,7 @@ using be_artwork_sharing_platform.Core.DbContext;
 namespace be_artwork_sharing_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240306125035_init")]
+    [Migration("20240309144328_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -188,6 +188,9 @@ namespace be_artwork_sharing_platform.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -216,6 +219,9 @@ namespace be_artwork_sharing_platform.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

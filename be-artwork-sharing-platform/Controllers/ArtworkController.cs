@@ -106,7 +106,7 @@ namespace be_artwork_sharing_platform.Controllers
                 return Ok(new GeneralServiceResponseDto()
                 {
                     IsSucceed = true,
-                    StatusCode = 204,
+                    StatusCode = 203,
                     Message = "Create new Artwork Successfully"
                 });
             }

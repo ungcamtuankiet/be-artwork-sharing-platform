@@ -1,4 +1,6 @@
-﻿namespace be_artwork_sharing_platform.Core.Dtos.Auth
+﻿using be_artwork_sharing_platform.Core.Dtos.User;
+
+namespace be_artwork_sharing_platform.Core.Dtos.Auth
 {
     public class LoginServiceResponceDto
     {

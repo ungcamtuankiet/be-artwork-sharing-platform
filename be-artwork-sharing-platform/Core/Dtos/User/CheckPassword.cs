@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using PasswordVerificationResult = Microsoft.AspNetCore.Identity.PasswordVerificationResult;
 
-namespace be_artwork_sharing_platform.Core.Dtos.Auth
+namespace be_artwork_sharing_platform.Core.Dtos.User
 {
     public class CheckPassword
     {

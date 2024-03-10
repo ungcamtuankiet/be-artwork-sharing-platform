@@ -1,4 +1,4 @@
-﻿namespace be_artwork_sharing_platform.Core.Dtos.Auth
+﻿namespace be_artwork_sharing_platform.Core.Dtos.User
 {
     public class UserInfoResult
     {
