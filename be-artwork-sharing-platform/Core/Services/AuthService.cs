@@ -3,6 +3,7 @@ using be_artwork_sharing_platform.Core.DbContext;
 using be_artwork_sharing_platform.Core.Dtos.Artwork;
 using be_artwork_sharing_platform.Core.Dtos.Auth;
 using be_artwork_sharing_platform.Core.Dtos.General;
+using be_artwork_sharing_platform.Core.Dtos.User;
 using be_artwork_sharing_platform.Core.Entities;
 using be_artwork_sharing_platform.Core.Interfaces;
 using FirebaseAdmin.Auth.Hash;
@@ -36,9 +37,8 @@ namespace be_artwork_sharing_platform.Core.Services
         {
             bool isAdminRoleExists = await _roleManager.RoleExistsAsync(StaticUserRole.ADMIN);
             bool isCreatorRoleExists = await _roleManager.RoleExistsAsync(StaticUserRole.CREATOR);
-            bool isCustomerRoleExists = await _roleManager.RoleExistsAsync(StaticUserRole.CUSTOMER);
 
-            if (isAdminRoleExists && isCreatorRoleExists && isCustomerRoleExists)
+            if (isAdminRoleExists && isCreatorRoleExists)
                 return new GeneralServiceResponseDto()
                 {
                     IsSucceed = true,
@@ -48,7 +48,6 @@ namespace be_artwork_sharing_platform.Core.Services
 
             await _roleManager.CreateAsync(new IdentityRole(StaticUserRole.ADMIN));
             await _roleManager.CreateAsync(new IdentityRole(StaticUserRole.CREATOR));
-            await _roleManager.CreateAsync(new IdentityRole(StaticUserRole.CUSTOMER));
 
             return new GeneralServiceResponseDto()
             {
@@ -104,7 +103,7 @@ namespace be_artwork_sharing_platform.Core.Services
             }
 
             //Add a Default Customer Role to users
-            await _userManager.AddToRoleAsync(newUser, StaticUserRole.CUSTOMER);
+            await _userManager.AddToRoleAsync(newUser, StaticUserRole.CREATOR);
             await _logService.SaveNewLog(newUser.UserName, "Register to WebSite");
 
             return new GeneralServiceResponseDto()
@@ -140,7 +139,7 @@ namespace be_artwork_sharing_platform.Core.Services
             };
         }
 
-        public async Task<GeneralServiceResponseDto> UpdateRoleAsync(ClaimsPrincipal User, UpdateRoleDto updateRoleDto)
+/*        public async Task<GeneralServiceResponseDto> UpdateRoleAsync(ClaimsPrincipal User, UpdateRoleDto updateRoleDto)
         {
             var user = await _userManager.FindByNameAsync(updateRoleDto.UserName);
             if (user is null)
@@ -184,7 +183,7 @@ namespace be_artwork_sharing_platform.Core.Services
                 StatusCode = 403,
                 Message = "You are not allowed to change role of this user"
             };
-        }
+        }*/
 
         public async Task<LoginServiceResponceDto> MeAsync(MeDto meDto)
         {
@@ -215,40 +214,6 @@ namespace be_artwork_sharing_platform.Core.Services
                 NewToken = newToken,
                 UserInfo = userInfo,
             };
-        }
-
-        public async Task<IEnumerable<UserInfoResult>> GetUserListAsync()
-        {
-            var users = await _userManager.Users.ToListAsync();
-
-            List<UserInfoResult> userInfoResults = new List<UserInfoResult>();
-
-            foreach (var user in users)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                var userInfo = GeneralUserInfoObject(user, roles);
-                userInfoResults.Add(userInfo);
-            }
-
-            return userInfoResults;
-        }
-        public async Task<UserInfoResult?> GetUserDetailsByUserNameAsyncs(string userName)
-        {
-            var user = await _userManager.FindByNameAsync(userName);
-            if (user is null) return null;
-
-            var roles = await _userManager.GetRolesAsync(user);
-            var userInfo = GeneralUserInfoObject(user, roles);
-            return userInfo;
-        }
-
-        public async Task<IEnumerable<string>> GetUsernameListAsync()
-        {
-            var userNames = await _userManager.Users
-                .Select(q => q.UserName)
-                .ToListAsync();
-
-            return userNames;
         }
 
         //GeneralJWTTokenAsync
@@ -285,23 +250,6 @@ namespace be_artwork_sharing_platform.Core.Services
             return token;
         }
 
-        //GeneralUserInfoObject
-        private UserInfoResult GeneralUserInfoObject(ApplicationUser user, IList<string> roles)
-        {
-            // Instead of this, You can use Automapper packages. But i don't want it in this project
-            return new UserInfoResult()
-            {
-                Id = user.Id,
-                FullName = user.FullName,
-                UserName = user.UserName,
-                Email = user.Email,
-                Address = user.Address,
-                PhoneNumber = user.PhoneNumber,
-                CreatedAt = user.CreatedAt,
-                Roles = roles
-            };
-        }
-
         public async Task<string> GetCurrentUserId(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
@@ -334,29 +282,29 @@ namespace be_artwork_sharing_platform.Core.Services
             return null;
         }
 
-        public async Task UpdateUser(UpdateUser updateUser, string userId)
+        public async Task<bool> GetStatusUser(string username)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
-            if(user is not null)
-            {
-                user.FullName = updateUser.FullName;
-                user.Email = updateUser.Email;
-                user.Address = updateUser.Address;
-                user.PhoneNumber = updateUser.PhoneNo;
-            }
-            _context.Update(user);
-            _context.SaveChanges();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user is not null)
+                return user.IsActive;
+            return false;
         }
 
-        public void ChangePassword(ChangePassword changePassword, string userID)
+        //GeneralUserInfoObject
+        private UserInfoResult GeneralUserInfoObject(ApplicationUser user, IList<string> roles)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userID));
-            if (user is not null)
+            // Instead of this, You can use Automapper packages. But i don't want it in this project
+            return new UserInfoResult()
             {
-                user.PasswordHash = CheckPassword.HashPassword(changePassword.NewPassword);
-            }
-            _context.Update(user);
-            _context.SaveChanges();
+                Id = user.Id,
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Email = user.Email,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
+                CreatedAt = user.CreatedAt,
+                Roles = roles
+            };
         }
     }
 }

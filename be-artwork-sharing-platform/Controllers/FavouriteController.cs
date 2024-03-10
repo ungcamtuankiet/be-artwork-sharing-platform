@@ -32,7 +32,7 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpPost]
         [Route("add-favourite")]
-        [Authorize(Roles = StaticUserRole.CUSTOMER)]
+        [Authorize(Roles = StaticUserRole.CREATOR)]
         public async Task<IActionResult> AddFavourite(long artwork_Id)
         {
             try
@@ -66,7 +66,7 @@ namespace be_artwork_sharing_platform.Controllers
                     else
                     {
                         _favouriteService.AddToFavourite(userId, artwork_Id, favouriteDto.Id);
-                        _logService.SaveNewLog(userNameCurrent, "Add Artwork to Favourite");
+                        _logService.SaveNewLog(userNameCurrent, "Add Artwork to your Favourite Successfully");
                         return Ok(new GeneralServiceResponseDto()
                         {
                             IsSucceed = true,
@@ -84,7 +84,7 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpDelete]
         [Route("remove-artwork")]
-        [Authorize(Roles = StaticUserRole.CUSTOMER)]
+        [Authorize(Roles = StaticUserRole.CREATOR)]
         public async Task<IActionResult> RemoveArtwork(long favourite_Id)
         {
             try
@@ -103,6 +103,7 @@ namespace be_artwork_sharing_platform.Controllers
                 }
                 else
                 {
+                    _logService.SaveNewLog(userName, "Remove Artwork from your Favourite Successfully");
                     return Ok(new GeneralServiceResponseDto()
                     {
                         IsSucceed = true,
@@ -119,7 +120,7 @@ namespace be_artwork_sharing_platform.Controllers
 
         [HttpGet]
         [Route("get-favourite")]
-        [Authorize(Roles = StaticUserRole.CUSTOMER)]
+        [Authorize(Roles = StaticUserRole.CREATOR)]
         public async Task<IActionResult> GetFavourite()
         {
             try

@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  be-artwork-sharing-platform:
+    image: ${DOCKER_REGISTRY-}beartworksharingplatform
+    build:
+      context: .
+      dockerfile: be-artwork-sharing-platform\Dockerfile

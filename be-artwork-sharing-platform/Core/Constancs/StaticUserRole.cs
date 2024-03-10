@@ -4,9 +4,5 @@
     {
         public const string ADMIN = "ADMIN";
         public const string CREATOR = "CREATOR";
-        public const string CUSTOMER = "CUSTOMER";
-
-        public const string AdminCreator = "ADMIN,CREATOR";
-        public const string AdminCreatorCustomer = "ADMIN,CREATOR,CUSTOMER";
     }
 }

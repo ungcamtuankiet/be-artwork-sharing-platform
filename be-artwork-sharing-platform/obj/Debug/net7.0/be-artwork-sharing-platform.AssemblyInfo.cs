@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("8e98266c-f399-4c0d-8526-4e742643793c")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("be-artwork-sharing-platform")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+765e582abdb1e824e70a0f712855edea497527fa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+702185633d45aa8b0234667aaecb103035400ef3")]
 [assembly: System.Reflection.AssemblyProductAttribute("be-artwork-sharing-platform")]
 [assembly: System.Reflection.AssemblyTitleAttribute("be-artwork-sharing-platform")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

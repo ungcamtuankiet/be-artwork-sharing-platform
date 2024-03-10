@@ -10,3 +10,4 @@ bin
 **/data-mssql
 .user
 .fake
+/be-artwork-sharing-platform/Dockerfile
