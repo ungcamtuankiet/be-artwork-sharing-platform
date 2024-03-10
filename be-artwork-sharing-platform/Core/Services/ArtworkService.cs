@@ -21,12 +21,27 @@ namespace be_artwork_sharing_platform.Core.Services
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IEnumerable<Artwork> GetAll()
+        public async Task<IEnumerable<ArtworkDto>> GetAll()
         {
-            return _context.Artworks.ToList();
+            var artworks = await _context.Artworks
+                .Select(a => new ArtworkDto
+                {
+                    Id = a.Id,
+                    User_Id = a.User_Id,
+                    User_Name = a.User_Name,
+                    Name = a.User_Name,
+                    Description = a.Description,
+                    Url_Image = a.Url_Image,
+                    Price = a.Price,
+                    CreatedAt = a.CreatedAt,
+                    UpdatedAt = a.UpdatedAt,
+                    IsActive = a.IsActive,
+                    IsDeleted = a.IsDeleted,
+                }).ToListAsync();
+            return artworks;
         }
 
-        public IEnumerable<Artwork> SearchArtwork(string? search,string? searchBy, double? from, double? to, string? sortBy)
+        public async Task<IEnumerable<Artwork>> SearchArtwork(string? search,string? searchBy, double? from, double? to, string? sortBy)
         {
             var artworks = _context.Artworks.Include(a => a.Category).AsQueryable();
             #region Filter
@@ -81,7 +96,7 @@ namespace be_artwork_sharing_platform.Core.Services
             return artworks.ToList();
         }
 
-        public IEnumerable<Artwork> GetArtworkByUserId(string user_Id)
+        public async Task<IEnumerable<Artwork>> GetArtworkByUserId(string user_Id)
         {
             var artworks = _context.Artworks.Where(a => a.User_Id == user_Id);
             if (artworks is null)
@@ -89,7 +104,7 @@ namespace be_artwork_sharing_platform.Core.Services
             return artworks.ToList();
         }
 
-        public Artwork GetById(long id)
+        public async Task<Artwork> GetById(long id)
         {
             return _context.Artworks.Find(id) ?? throw new Exception("Artwork not found");
         }
