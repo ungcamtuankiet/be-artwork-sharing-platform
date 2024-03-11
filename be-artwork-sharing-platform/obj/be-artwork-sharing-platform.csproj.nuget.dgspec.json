@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Learning\\SWP\\be-artwork-shraing-platform\\be-artwork-sharing-platform\\be-artwork-sharing-platform.csproj": {}
+    "C:\\Learning\\SWP\\artworkweb\\be-artwork-sharing-platform\\be-artwork-sharing-platform\\be-artwork-sharing-platform.csproj": {}
   },
   "projects": {
-    "C:\\Learning\\SWP\\be-artwork-shraing-platform\\be-artwork-sharing-platform\\be-artwork-sharing-platform.csproj": {
+    "C:\\Learning\\SWP\\artworkweb\\be-artwork-sharing-platform\\be-artwork-sharing-platform\\be-artwork-sharing-platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Learning\\SWP\\be-artwork-shraing-platform\\be-artwork-sharing-platform\\be-artwork-sharing-platform.csproj",
+        "projectUniqueName": "C:\\Learning\\SWP\\artworkweb\\be-artwork-sharing-platform\\be-artwork-sharing-platform\\be-artwork-sharing-platform.csproj",
         "projectName": "be-artwork-sharing-platform",
-        "projectPath": "C:\\Learning\\SWP\\be-artwork-shraing-platform\\be-artwork-sharing-platform\\be-artwork-sharing-platform.csproj",
+        "projectPath": "C:\\Learning\\SWP\\artworkweb\\be-artwork-sharing-platform\\be-artwork-sharing-platform\\be-artwork-sharing-platform.csproj",
         "packagesPath": "C:\\Users\\ungca\\.nuget\\packages\\",
-        "outputPath": "C:\\Learning\\SWP\\be-artwork-shraing-platform\\be-artwork-sharing-platform\\obj\\",
+        "outputPath": "C:\\Learning\\SWP\\artworkweb\\be-artwork-sharing-platform\\be-artwork-sharing-platform\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -48,17 +48,9 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
-            "BCrypt.Net-Next": {
-              "target": "Package",
-              "version": "[4.0.3, )"
-            },
             "FirebaseAdmin": {
               "target": "Package",
               "version": "[2.4.0, )"
-            },
-            "Microsoft.AspNet.Identity.Core": {
-              "target": "Package",
-              "version": "[2.2.4, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
@@ -81,10 +73,6 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.16, )"
-            },
-            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
-              "target": "Package",
-              "version": "[1.19.5, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

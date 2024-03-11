@@ -4,7 +4,6 @@ using be_artwork_sharing_platform.Core.Dtos.General;
 using be_artwork_sharing_platform.Core.Dtos.User;
 using be_artwork_sharing_platform.Core.Interfaces;
 using FirebaseAdmin.Auth.Hash;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
