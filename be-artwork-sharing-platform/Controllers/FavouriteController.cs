@@ -97,7 +97,7 @@ namespace be_artwork_sharing_platform.Controllers
                     return BadRequest(new GeneralServiceResponseDto()
                     {
                         IsSucceed = false,
-                        StatusCode = 404,
+                        StatusCode = 400,
                         Message = "You can not remove this artwork"
                     });
                 }
@@ -133,7 +133,7 @@ namespace be_artwork_sharing_platform.Controllers
                     return NotFound(new GeneralServiceResponseDto()
                     {
                         IsSucceed = false,
-                        StatusCode = 204,
+                        StatusCode = 404,
                         Message = "You do not have Artwork in your favourite"
                     });
                 }
